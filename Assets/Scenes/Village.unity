@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657868, g: 0.4964127, b: 0.57481724, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -298,7 +298,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4374336470122456, guid: 83ac0a895d75e074d9438fd1e6c9cc32, type: 2}
       propertyPath: m_LocalPosition.x
-      value: -6.484925
+      value: -7.51
       objectReference: {fileID: 0}
     - target: {fileID: 4374336470122456, guid: 83ac0a895d75e074d9438fd1e6c9cc32, type: 2}
       propertyPath: m_LocalRotation.x
@@ -326,7 +326,11 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4374336470122456, guid: 83ac0a895d75e074d9438fd1e6c9cc32, type: 2}
       propertyPath: m_LocalPosition.z
-      value: 3.548849
+      value: 4.14
+      objectReference: {fileID: 0}
+    - target: {fileID: 4374336470122456, guid: 83ac0a895d75e074d9438fd1e6c9cc32, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 5.16
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 83ac0a895d75e074d9438fd1e6c9cc32, type: 2}
@@ -489,22 +493,6 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 946d51bc26ed43a4ab983b57ddf6e266, type: 2}
   m_IsPrefabParent: 0
---- !u!1 &267260035 stripped
-GameObject:
-  m_PrefabParentObject: {fileID: 1063074142632684, guid: 83ac0a895d75e074d9438fd1e6c9cc32,
-    type: 2}
-  m_PrefabInternal: {fileID: 74500836}
---- !u!114 &267260042
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 267260035}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2e730194c6ad2c54d9acf54714c1322f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &302196895
 Prefab:
   m_ObjectHideFlags: 0
@@ -1273,6 +1261,11 @@ Prefab:
     - target: {fileID: 4202790824538174, guid: db4bcfd08d4fdc6438fc930a1d9a9998, type: 2}
       propertyPath: m_LocalRotation.w
       value: -0.11041513
+      objectReference: {fileID: 0}
+    - target: {fileID: 114868367229754540, guid: db4bcfd08d4fdc6438fc930a1d9a9998,
+        type: 2}
+      propertyPath: walkMoveStopRadius
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: db4bcfd08d4fdc6438fc930a1d9a9998, type: 2}

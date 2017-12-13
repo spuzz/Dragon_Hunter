@@ -7,17 +7,17 @@ public class PlayerMovement : MonoBehaviour
 {
     
     [SerializeField] float walkMoveStopRadius = 0.2f;
-
+    [SerializeField] float attackMoveStopRadius = 0.2f;
     ThirdPersonCharacter thirdPersonCharacter;   // A reference to the ThirdPersonCharacter on the object
     CameraRaycaster cameraRaycaster;
-    Vector3 currentClickTarget;
+    Vector3 CurrentDestination, clickPoint;
     bool isInDirectMode = false;
 
     private void Start()
     {
         cameraRaycaster = Camera.main.GetComponent<CameraRaycaster>();
         thirdPersonCharacter = GetComponent<ThirdPersonCharacter>();
-        currentClickTarget = transform.position;
+        CurrentDestination = transform.position;
     }
 
     // Fixed update is called in sync with physics
@@ -25,7 +25,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if(Input.GetKeyDown(KeyCode.G)) // G for gamepad. TODO add to menu
         {
-            currentClickTarget = transform.position;
+            CurrentDestination = transform.position;
             isInDirectMode = !isInDirectMode;
         }
 
@@ -56,12 +56,14 @@ public class PlayerMovement : MonoBehaviour
     {
         if (Input.GetMouseButton(0))
         {
+            clickPoint = cameraRaycaster.hit.point;
             switch (cameraRaycaster.currentLayerHit)
             {
                 case Layer.Walkable:
-                    currentClickTarget = cameraRaycaster.hit.point;
+                    CurrentDestination = ShortDestination(clickPoint, walkMoveStopRadius);
                     break;
                 case Layer.Enemy:
+                    CurrentDestination = ShortDestination(clickPoint, attackMoveStopRadius);
                     break;
                 default:
                     print("SHOULDN'T BE HERE");
@@ -69,8 +71,13 @@ public class PlayerMovement : MonoBehaviour
             }
 
         }
-        Vector3 playerToClickPoint = currentClickTarget - transform.position;
-        if (playerToClickPoint.magnitude > walkMoveStopRadius)
+        WalkToDestination();
+    }
+
+    private void WalkToDestination()
+    {
+        Vector3 playerToClickPoint = CurrentDestination - transform.position;
+        if (playerToClickPoint.magnitude >= 0)
         {
             thirdPersonCharacter.Move(playerToClickPoint, false, false);
         }
@@ -78,6 +85,20 @@ public class PlayerMovement : MonoBehaviour
         {
             thirdPersonCharacter.Move(Vector3.zero, false, false);
         }
+    }
+
+    private Vector3 ShortDestination(Vector3 destination, float shortening)
+    {
+        Vector3 reductionVector = (destination - transform.position).normalized * shortening;
+        return destination - reductionVector;
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.black;
+        Gizmos.DrawLine(transform.position,CurrentDestination);
+        Gizmos.DrawSphere(CurrentDestination, 0.1f);
+        Gizmos.DrawSphere(clickPoint, 0.1f);
     }
 }
 

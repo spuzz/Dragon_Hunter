@@ -23,20 +23,13 @@ public class CameraRaycaster : MonoBehaviour
     }
 
 
-    public delegate void OnLayerChange();
-    public OnLayerChange layerChangeObservers; 
-
-    void LayerChangeHandler()
-    {
-        print("I handled it");
-    }
+    public delegate void OnLayerChange(Layer newLayer);
+    public event OnLayerChange onLayerChange; 
 
 
     void Start()
     {
         viewCamera = Camera.main;
-        layerChangeObservers += LayerChangeHandler;
-        layerChangeObservers();
     }
 
     void Update()
@@ -48,6 +41,11 @@ public class CameraRaycaster : MonoBehaviour
             if (hit.HasValue)
             {
                 raycastHit = hit.Value;
+                if(layerHit != layer)
+                {
+                    layerHit = layer;
+                    onLayerChange(layer);
+                }
                 layerHit = layer;
                 return;
             }
@@ -68,6 +66,7 @@ public class CameraRaycaster : MonoBehaviour
         bool hasHit = Physics.Raycast(ray, out hit, distanceToBackground, layerMask);
         if (hasHit)
         {
+            
             return hit;
         }
         return null;
