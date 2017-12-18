@@ -20,25 +20,6 @@ public class PlayerMovement : MonoBehaviour
         CurrentDestination = transform.position;
     }
 
-    // Fixed update is called in sync with physics
-    private void FixedUpdate()
-    {
-        if(Input.GetKeyDown(KeyCode.G)) // G for gamepad. TODO add to menu
-        {
-            CurrentDestination = transform.position;
-            isInDirectMode = !isInDirectMode;
-        }
-
-        if(isInDirectMode)
-        {
-            ProcessDirectMovement();
-        }
-        else
-        {
-            ProcessMouseMovement();
-        }
-        
-    }
 
     private void ProcessDirectMovement()
     {
@@ -54,24 +35,24 @@ public class PlayerMovement : MonoBehaviour
 
     private void ProcessMouseMovement()
     {
-        if (Input.GetMouseButton(0))
-        {
-            clickPoint = cameraRaycaster.hit.point;
-            switch (cameraRaycaster.currentLayerHit)
-            {
-                case Layer.Walkable:
-                    CurrentDestination = ShortDestination(clickPoint, walkMoveStopRadius);
-                    break;
-                case Layer.Enemy:
-                    CurrentDestination = ShortDestination(clickPoint, attackMoveStopRadius);
-                    break;
-                default:
-                    print("SHOULDN'T BE HERE");
-                    break;
-            }
+        //if (Input.GetMouseButton(0))
+        //{
+        //    clickPoint = cameraRaycaster.hit.point;
+        //    switch (cameraRaycaster.currentLayerHit)
+        //    {
+        //        case Layer.Walkable:
+        //            CurrentDestination = ShortDestination(clickPoint, walkMoveStopRadius);
+        //            break;
+        //        case Layer.Enemy:
+        //            CurrentDestination = ShortDestination(clickPoint, attackMoveStopRadius);
+        //            break;
+        //        default:
+        //            print("SHOULDN'T BE HERE");
+        //            break;
+        //    }
 
-        }
-        WalkToDestination();
+        //}
+        //WalkToDestination();
     }
 
     private void WalkToDestination()
