@@ -1,23 +1,35 @@
 using System;
 using UnityEngine;
 using UnityStandardAssets.Characters.ThirdPerson;
+using UnityEngine.AI;
 
+[RequireComponent(typeof(NavMeshAgent))]
+[RequireComponent(typeof(AICharacterControl))]
 [RequireComponent(typeof (ThirdPersonCharacter))]
+
 public class PlayerMovement : MonoBehaviour
 {
     
-    [SerializeField] float walkMoveStopRadius = 0.2f;
-    [SerializeField] float attackMoveStopRadius = 0.2f;
+    [SerializeField] const int walkable = 8;
+    [SerializeField] const int enemy = 9;
+    [SerializeField] const int unknown = 10;
+
     ThirdPersonCharacter thirdPersonCharacter;   // A reference to the ThirdPersonCharacter on the object
+    AICharacterControl aiCharacterControl = null;
     CameraRaycaster cameraRaycaster;
     Vector3 CurrentDestination, clickPoint;
     bool isInDirectMode = false;
+    GameObject walkTarget = null;
 
     private void Start()
     {
         cameraRaycaster = Camera.main.GetComponent<CameraRaycaster>();
         thirdPersonCharacter = GetComponent<ThirdPersonCharacter>();
+        aiCharacterControl = GetComponent<AICharacterControl>();
+        
+        cameraRaycaster.notifyMouseClickObservers += ProcessMouseClick;
         CurrentDestination = transform.position;
+        walkTarget = new GameObject("WalkTarget");
     }
 
 
@@ -30,48 +42,24 @@ public class PlayerMovement : MonoBehaviour
         Vector3 movement = v * cameraForward + h * Camera.main.transform.right;
 
         thirdPersonCharacter.Move(movement, false, false);
-        
+
     }
 
-    private void ProcessMouseMovement()
+    private void ProcessMouseClick(RaycastHit raycastHit, int layerHit)
     {
-        //if (Input.GetMouseButton(0))
-        //{
-        //    clickPoint = cameraRaycaster.hit.point;
-        //    switch (cameraRaycaster.currentLayerHit)
-        //    {
-        //        case Layer.Walkable:
-        //            CurrentDestination = ShortDestination(clickPoint, walkMoveStopRadius);
-        //            break;
-        //        case Layer.Enemy:
-        //            CurrentDestination = ShortDestination(clickPoint, attackMoveStopRadius);
-        //            break;
-        //        default:
-        //            print("SHOULDN'T BE HERE");
-        //            break;
-        //    }
-
-        //}
-        //WalkToDestination();
-    }
-
-    private void WalkToDestination()
-    {
-        Vector3 playerToClickPoint = CurrentDestination - transform.position;
-        if (playerToClickPoint.magnitude >= 0)
+        clickPoint = raycastHit.point;
+        switch (layerHit)
         {
-            thirdPersonCharacter.Move(playerToClickPoint, false, false);
+            case walkable:
+                walkTarget.transform.position = clickPoint;
+                aiCharacterControl.SetTarget(walkTarget.transform);
+                break;
+            case enemy:
+                aiCharacterControl.SetTarget(raycastHit.collider.gameObject.transform);
+                break;
+            default:
+                break;
         }
-        else
-        {
-            thirdPersonCharacter.Move(Vector3.zero, false, false);
-        }
-    }
-
-    private Vector3 ShortDestination(Vector3 destination, float shortening)
-    {
-        Vector3 reductionVector = (destination - transform.position).normalized * shortening;
-        return destination - reductionVector;
     }
 
     private void OnDrawGizmos()

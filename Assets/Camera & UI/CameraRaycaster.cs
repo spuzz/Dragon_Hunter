@@ -45,7 +45,7 @@ public class CameraRaycaster : MonoBehaviour
 		// Notify delegates of highest priority game object under mouse when clicked
 		if (Input.GetMouseButton (0))
 		{
-			//notifyMouseClickObservers (priorityHit.Value, layerHit);
+			notifyMouseClickObservers (priorityHit.Value, layerHit);
 		}
 	}
 
