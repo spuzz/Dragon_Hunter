@@ -6,16 +6,18 @@ public class Enemy : MonoBehaviour, IDamageable {
 
     [SerializeField] float maxHealthPoints = 100f;
     [SerializeField] float damagePerShot = 9f;
+    [SerializeField] float secondsBetweenShots = 1f;
 
     [SerializeField] float attackRadius = 1f;
     [SerializeField] float chaseRadius = 1f;
 
     [SerializeField] GameObject projectileToUse;
     [SerializeField] GameObject projectileSocket;
+    [SerializeField] Vector3 aimOffset = new Vector3(0,1f,0);
 
-    
+    bool isAttacking = false;
 
-    float currentHealthPoints = 100f;
+    float currentHealthPoints;
     ThirdPersonCharacter thirdPersonCharacter;
     AICharacterControl aiCharacterControl = null;
     public float healthAsPercentage { get { return currentHealthPoints / (float)maxHealthPoints; } }
@@ -23,21 +25,33 @@ public class Enemy : MonoBehaviour, IDamageable {
     void IDamageable.TakeDamage(float damage)
     {
         currentHealthPoints = Mathf.Clamp(currentHealthPoints - damage, 0, maxHealthPoints);
+        if (currentHealthPoints <= 0)
+        {
+            Destroy(gameObject);
+        }
     }
 
     public void Start()
     {
         thirdPersonCharacter = GameObject.FindGameObjectWithTag("Player").GetComponent<ThirdPersonCharacter>();
         aiCharacterControl = GetComponent<AICharacterControl>();
+        currentHealthPoints = maxHealthPoints;
     }
 
     public void Update()
     {
         float distancetoPlayer = Vector3.Distance(thirdPersonCharacter.transform.position, transform.position);
 
-        if (distancetoPlayer <= attackRadius)
+        if (distancetoPlayer <= attackRadius && !isAttacking)
         {
-            SpawnProjectile();
+            isAttacking = true;
+            InvokeRepeating("SpawnProjectile", 0f, secondsBetweenShots);
+        }
+
+        if(distancetoPlayer > attackRadius )
+        {
+            CancelInvoke();
+            isAttacking = false;
         }
 
         if (distancetoPlayer <= chaseRadius)
@@ -55,9 +69,9 @@ public class Enemy : MonoBehaviour, IDamageable {
     {
         GameObject newProjectile = Instantiate(projectileToUse, projectileSocket.transform.position,Quaternion.identity);
         Projectile projectileComponent = newProjectile.GetComponent<Projectile>();
-        projectileComponent.damageCaused = damagePerShot;
+        projectileComponent.SetDamage(damagePerShot);
 
-        Vector3 unitVectorToPlayer = (thirdPersonCharacter.transform.position - projectileSocket.transform.position).normalized;
+        Vector3 unitVectorToPlayer = (thirdPersonCharacter.transform.position + aimOffset - projectileSocket.transform.position).normalized;
         newProjectile.GetComponent<Rigidbody>().velocity = unitVectorToPlayer * projectileComponent.projectileSpeed;
     }
 

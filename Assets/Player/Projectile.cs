@@ -5,13 +5,17 @@ using UnityStandardAssets.Characters.ThirdPerson;
 
 public class Projectile : MonoBehaviour {
 
-    public float damageCaused;
+    float damageCaused;
     public float projectileSpeed;
     
 	// Use this for initialization
 	void Start () {
     }
 
+    public void SetDamage(float damage)
+    {
+        damageCaused = damage;
+    }
     private void OnTriggerEnter(Collider collider)
     {
         Component damageableComponent = collider.gameObject.GetComponent(typeof(IDamageable));
