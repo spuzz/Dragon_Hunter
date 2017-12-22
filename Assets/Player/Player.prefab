@@ -490,7 +490,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1571261799754092}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 8.95, y: 0, z: 2.92}
+  m_LocalPosition: {x: -4.62, y: 0, z: 2.92}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4586463034062010}
@@ -844,8 +844,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 902b3202dbe6da449870cca2e0d9bb9a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealthPoints: 200
-  damagePerHit: 30
+  maxHealthPoints: 1000
+  damagePerHit: 50
   minTimeBetweenHits: 0.5
   maxAttackRange: 2
 --- !u!114 &114306588248014084

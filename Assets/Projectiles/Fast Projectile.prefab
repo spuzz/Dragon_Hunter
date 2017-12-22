@@ -24,10 +24,10 @@ GameObject:
   - component: {fileID: 135889713469948668}
   - component: {fileID: 54655068530255478}
   - component: {fileID: 114557959441037288}
+  - component: {fileID: 114705860777973518}
   - component: {fileID: 114096830314233768}
-  - component: {fileID: 114661945554403040}
   m_Layer: 9
-  m_Name: Projectile
+  m_Name: Fast Projectile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -40,8 +40,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1327400261232320}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.3, y: 0.3, z: 0.3}
+  m_LocalPosition: {x: 7.56699, y: 0.49921805, z: 2.3105278}
+  m_LocalScale: {x: 0.3871938, y: 0.38719386, z: 0.38719386}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -113,8 +113,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 503032ad023165443ab3d4bc9ab3c038, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damageCaused: 0
-  projectileSpeed: 10
+  projectileSpeed: 20
 --- !u!114 &114557959441037288
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -130,7 +129,7 @@ MonoBehaviour:
   m_UseTorque: 1
   m_MaxAngularVelocity: 25
   m_JumpPower: 4
---- !u!114 &114661945554403040
+--- !u!114 &114705860777973518
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -147,7 +146,7 @@ SphereCollider:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1327400261232320}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 52baaeb214519f347a35cf0edfd262ff, type: 2}
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
