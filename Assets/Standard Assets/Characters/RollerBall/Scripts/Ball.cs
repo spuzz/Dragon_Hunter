@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace UnityStandardAssets.Vehicles.Ball
 {
+    
     public class Ball : MonoBehaviour
     {
         [SerializeField] private float m_MovePower = 5; // The force added to the ball to move it.
@@ -12,11 +13,9 @@ namespace UnityStandardAssets.Vehicles.Ball
 
         private const float k_GroundRayLength = 1f; // The length of the ray to check if the ball is grounded.
         private Rigidbody m_Rigidbody;
-
-
-        private void Start()
+        private void Awake()
         {
-            m_Rigidbody = GetComponent<Rigidbody>();
+            m_Rigidbody = gameObject.GetComponent<Rigidbody>();
             // Set the maximum angular velocity.
             GetComponent<Rigidbody>().maxAngularVelocity = m_MaxAngularVelocity;
         }
