@@ -10,6 +10,8 @@ public class Player : MonoBehaviour, IDamageable
     [SerializeField] const int enemy = 9;
     [SerializeField] float minTimeBetweenHits = 0.5f;
     [SerializeField] float maxAttackRange = 2f;
+    [SerializeField] Weapon weaponInUse;
+
     GameObject currentTarget;
     CameraRaycaster cameraRaycaster;
     float lastHitTime = 0;
@@ -22,6 +24,8 @@ public class Player : MonoBehaviour, IDamageable
         cameraRaycaster = Camera.main.GetComponent<CameraRaycaster>();
         cameraRaycaster.notifyMouseClickObservers += ProcessMouseClick;
         currentHealthPoints = maxHealthPoints;
+        weaponInUse = new Weapon();
+       //weaponInUse.
     }
 
     void IDamageable.TakeDamage(float damage)
