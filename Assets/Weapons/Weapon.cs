@@ -5,11 +5,13 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "RPG/Weapon")]
 public class Weapon : ScriptableObject {
 
+    public Transform gripTransform;
     [SerializeField] GameObject weaponPrefab;
     [SerializeField] AnimationClip attackAnimation;
 
-    void SetWeapon(GameObject obj)
+
+    public GameObject GetWeaponPrefab()
     {
-        //weaponPrefab = CreateInstance(Weapon);
+        return weaponPrefab;
     }
 }

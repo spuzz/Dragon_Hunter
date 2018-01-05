@@ -1,7 +1,8 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.Assertions;
 public class Player : MonoBehaviour, IDamageable
 {
 
@@ -21,11 +22,34 @@ public class Player : MonoBehaviour, IDamageable
 
     void Start()
     {
+        RegisterMouseClick();
+        currentHealthPoints = maxHealthPoints;
+        PutWeaponInHand();
+         
+    }
+
+    private void PutWeaponInHand()
+    {
+        var weaponPrefab = weaponInUse.GetWeaponPrefab();
+        GameObject dominantHand = RequestDominantHand();
+        var weapon = Instantiate(weaponPrefab,dominantHand.transform);
+        weapon.transform.localPosition = weaponInUse.gripTransform.localPosition;
+        weapon.transform.localRotation = weaponInUse.gripTransform.localRotation;
+    }
+
+    private GameObject RequestDominantHand()
+    {
+        var dominantHands = GetComponentsInChildren<DominantHand>();
+        int numberOfDominantHands = dominantHands.Length;
+        Assert.IsFalse(numberOfDominantHands < 0, "No DominantHand found on Player, Please add one");
+        Assert.IsFalse(numberOfDominantHands > 1, "Multiple DominantHand scripts on Player, please remove one");
+        return dominantHands[0].gameObject;
+    }
+
+    private void RegisterMouseClick()
+    {
         cameraRaycaster = Camera.main.GetComponent<CameraRaycaster>();
         cameraRaycaster.notifyMouseClickObservers += ProcessMouseClick;
-        currentHealthPoints = maxHealthPoints;
-        weaponInUse = new Weapon();
-       //weaponInUse.
     }
 
     void IDamageable.TakeDamage(float damage)
