@@ -45,7 +45,7 @@ public class Enemy : MonoBehaviour, IDamageable {
         if (distancetoPlayer <= attackRadius && !isAttacking)
         {
             isAttacking = true;
-            InvokeRepeating("SpawnProjectile", 0f, secondsBetweenShots);
+            InvokeRepeating("FireProjectile", 0f, secondsBetweenShots);
         }
 
         if(distancetoPlayer > attackRadius )
@@ -65,14 +65,16 @@ public class Enemy : MonoBehaviour, IDamageable {
 
     }
 
-    void SpawnProjectile()
+    void FireProjectile()
     {
         GameObject newProjectile = Instantiate(projectileToUse, projectileSocket.transform.position,Quaternion.identity);
         Projectile projectileComponent = newProjectile.GetComponent<Projectile>();
         projectileComponent.SetDamage(damagePerShot);
+        projectileComponent.SetShooter(gameObject);
 
         Vector3 unitVectorToPlayer = (thirdPersonCharacter.transform.position + aimOffset - projectileSocket.transform.position).normalized;
-        newProjectile.GetComponent<Rigidbody>().velocity = unitVectorToPlayer * projectileComponent.projectileSpeed;
+        newProjectile.GetComponent<Rigidbody>().velocity = unitVectorToPlayer * projectileComponent.GetDefaultLaunchSpeed();
+        
     }
 
     private void OnDrawGizmos()
