@@ -21,7 +21,13 @@ namespace RPG.Weapons
 
         public AnimationClip GetAttackAnimation()
         {
+            RemoveAnimationEvents();
             return attackAnimation;
+        }
+
+        private void RemoveAnimationEvents()
+        {
+            attackAnimation.events = new AnimationEvent[0];
         }
     }
 }
