@@ -14,10 +14,11 @@ namespace RPG.Characters
         [SerializeField] float maxHealthPoints = 100f;
         [SerializeField] float damagePerHit = 10f;
         [SerializeField] const int enemy = 9;
-        [SerializeField] float minTimeBetweenHits = 0.5f;
-        [SerializeField] float maxAttackRange = 2f;
+
         [SerializeField] Weapon weaponInUse;
         [SerializeField] AnimatorOverrideController animatorOverrideController;
+
+        Animator animator;
         GameObject currentTarget;
         CameraRaycaster cameraRaycaster;
         float lastHitTime = 0;
@@ -40,7 +41,7 @@ namespace RPG.Characters
 
         private void OverrideAnimatorController()
         {
-            Animator animator = GetComponent<Animator>();
+            animator = GetComponent<Animator>();
             animator.runtimeAnimatorController = animatorOverrideController;
             animatorOverrideController["Default Attack"] = weaponInUse.GetAttackAnimation();
         }
@@ -79,22 +80,42 @@ namespace RPG.Characters
         {
             if (layerHit == enemy)
             {
-                currentTarget = raycastHit.collider.gameObject;
-                Component damageableComponent = currentTarget.GetComponent(typeof(IDamageable));
-                if (damageableComponent)
-                {
-                    if (Vector3.Distance(damageableComponent.transform.position, transform.position) > maxAttackRange)
-                    {
-                        return;
-                    }
-                    if (Time.time - lastHitTime > minTimeBetweenHits)
-                    {
-                        (damageableComponent as IDamageable).TakeDamage(damagePerHit);
-                        lastHitTime = Time.time;
-                    }
+                HitEnemy(raycastHit);
+            }
+        }
 
+        private void HitEnemy(RaycastHit raycastHit)
+        {
+            currentTarget = raycastHit.collider.gameObject;
+            Component damageableComponent = currentTarget.GetComponent(typeof(IDamageable));
+            if (damageableComponent)
+            {
+                if (IsObjectInRange(damageableComponent))
+                {
+                    AttackTarget(damageableComponent);
                 }
             }
         }
+
+        private void AttackTarget(Component damageableComponent)
+        {
+            animator.SetTrigger("Attack");
+            if (Time.time - lastHitTime > weaponInUse.GetMinTimeBetweenHits())
+            {
+                (damageableComponent as IDamageable).TakeDamage(damagePerHit);
+                lastHitTime = Time.time;
+            }
+        }
+
+        private bool IsObjectInRange(Component damageableComponent)
+        {
+            if(Vector3.Distance(damageableComponent.transform.position, transform.position) > weaponInUse.GetMaxAttackRange())
+            {
+                return false;
+            }
+            return true;
+        }
     }
+
+
 }
