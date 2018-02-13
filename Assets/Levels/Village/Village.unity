@@ -242,7 +242,18 @@ Prefab:
       propertyPath: far clip plane
       value: 20
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 114370873637810326, guid: 83ac0a895d75e074d9438fd1e6c9cc32,
+        type: 2}
+      propertyPath: walkCursor
+      value: 
+      objectReference: {fileID: 2800000, guid: a447c9cbf983e954ea31f7fbcf3f1f7f, type: 3}
+    - target: {fileID: 114370873637810326, guid: 83ac0a895d75e074d9438fd1e6c9cc32,
+        type: 2}
+      propertyPath: enemyCursor
+      value: 
+      objectReference: {fileID: 2800000, guid: 02942153003656d46a7c785acdbbd1f6, type: 3}
+    m_RemovedComponents:
+    - {fileID: 114220999508592884, guid: 83ac0a895d75e074d9438fd1e6c9cc32, type: 2}
   m_ParentPrefab: {fileID: 100100000, guid: 83ac0a895d75e074d9438fd1e6c9cc32, type: 2}
   m_IsPrefabParent: 0
 --- !u!4 &89088076 stripped

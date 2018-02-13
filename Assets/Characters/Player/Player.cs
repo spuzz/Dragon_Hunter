@@ -13,7 +13,6 @@ namespace RPG.Characters
 
         [SerializeField] float maxHealthPoints = 100f;
         [SerializeField] float damagePerHit = 10f;
-        [SerializeField] const int enemy = 9;
 
         [SerializeField] Weapon weaponInUse;
         [SerializeField] AnimatorOverrideController animatorOverrideController;
@@ -67,7 +66,7 @@ namespace RPG.Characters
         private void RegisterMouseClick()
         {
             cameraRaycaster = Camera.main.GetComponent<CameraRaycaster>();
-            cameraRaycaster.notifyMouseClickObservers += ProcessMouseClick;
+            cameraRaycaster.onMouseOverEnemy += ProcessMouseOverEnemy;
         }
 
         void IDamageable.TakeDamage(float damage)
@@ -75,47 +74,31 @@ namespace RPG.Characters
             currentHealthPoints = Mathf.Clamp(currentHealthPoints - damage, 0, maxHealthPoints);
             //if(currentHealthPoints <= 0) { Destroy(gameObject);  }
         }
-
-        private void ProcessMouseClick(RaycastHit raycastHit, int layerHit)
+        private void ProcessMouseOverEnemy(Enemy enemy)
         {
-            if (layerHit == enemy)
+            if (Input.GetMouseButton(0))
             {
-                HitEnemy(raycastHit);
+                AttackTarget(enemy);
             }
+
         }
 
-        private void HitEnemy(RaycastHit raycastHit)
+        private void AttackTarget(Enemy enemy)
         {
-            currentTarget = raycastHit.collider.gameObject;
-            Component damageableComponent = currentTarget.GetComponent(typeof(IDamageable));
-            if (damageableComponent)
-            {
-                if (IsObjectInRange(damageableComponent))
-                {
-                    AttackTarget(damageableComponent);
-                }
-            }
-        }
-
-        private void AttackTarget(Component damageableComponent)
-        {
-            animator.SetTrigger("Attack");
+            
             if (Time.time - lastHitTime > weaponInUse.GetMinTimeBetweenHits())
             {
-                (damageableComponent as IDamageable).TakeDamage(damagePerHit);
+                animator.SetTrigger("Attack");
+                enemy.TakeDamage(damagePerHit);
                 lastHitTime = Time.time;
             }
         }
 
-        private bool IsObjectInRange(Component damageableComponent)
+        private bool IsTargetInRange(GameObject target)
         {
-            if(Vector3.Distance(damageableComponent.transform.position, transform.position) > weaponInUse.GetMaxAttackRange())
-            {
-                return false;
-            }
-            return true;
+            float distanceToTarget = (target.transform.position - transform.position).magnitude;
+            return distanceToTarget <= weaponInUse.GetMaxAttackRange();
         }
     }
-
 
 }

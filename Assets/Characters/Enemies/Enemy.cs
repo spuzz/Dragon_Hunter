@@ -6,7 +6,7 @@ using RPG.Core;
 using RPG.Weapons;
 namespace RPG.Characters
 {
-    public class Enemy : MonoBehaviour, IDamageable
+    public class Enemy : MonoBehaviour
     {
 
         [SerializeField] float maxHealthPoints = 100f;
@@ -27,7 +27,7 @@ namespace RPG.Characters
         AICharacterControl aiCharacterControl = null;
         public float healthAsPercentage { get { return currentHealthPoints / (float)maxHealthPoints; } }
 
-        void IDamageable.TakeDamage(float damage)
+        public void TakeDamage(float damage)
         {
             currentHealthPoints = Mathf.Clamp(currentHealthPoints - damage, 0, maxHealthPoints);
             if (currentHealthPoints <= 0)

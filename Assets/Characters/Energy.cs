@@ -24,14 +24,17 @@ namespace RPG.Characters
         private void RegisterMouseClick()
         {
             cameraRaycaster = Camera.main.GetComponent<CameraRaycaster>();
-            cameraRaycaster.notifyRightClickObservers += ProcessMouseClick;
+            cameraRaycaster.onMouseOverEnemy += ProcessMouseOverEnemy;
         }
 
-        private void ProcessMouseClick(RaycastHit raycastHit, int layerHit)
+        private void ProcessMouseOverEnemy(Enemy enemy)
         {
-            currentEnergyPoints = Mathf.Clamp(currentEnergyPoints - pointsPerHit, 0, maxEnergyPounts);
-            float xValue = -(energyAsPercentage / 2f) - 0.5f;
-            energyBar.uvRect = new Rect(xValue, 0f, 0.5f, 1f);
+            if(Input.GetMouseButtonDown(1))
+            {
+                currentEnergyPoints = Mathf.Clamp(currentEnergyPoints - pointsPerHit, 0, maxEnergyPounts);
+                float xValue = -(energyAsPercentage / 2f) - 0.5f;
+                energyBar.uvRect = new Rect(xValue, 0f, 0.5f, 1f);
+            }
         }
     }
 

@@ -30,7 +30,8 @@ namespace RPG.Characters
             thirdPersonCharacter = GetComponent<ThirdPersonCharacter>();
             aiCharacterControl = GetComponent<AICharacterControl>();
 
-            cameraRaycaster.notifyMouseClickObservers += ProcessMouseClick;
+            cameraRaycaster.onMouseOverTerrain += ProcessMouseOverTerrain;
+            cameraRaycaster.onMouseOverEnemy += OnMouseOverEnemy;
             CurrentDestination = transform.position;
             walkTarget = new GameObject("WalkTarget");
         }
@@ -48,20 +49,20 @@ namespace RPG.Characters
 
         }
 
-        private void ProcessMouseClick(RaycastHit raycastHit, int layerHit)
+        private void ProcessMouseOverTerrain(Vector3 destination)
         {
-            clickPoint = raycastHit.point;
-            switch (layerHit)
+            if(Input.GetMouseButton(0) == true)
             {
-                case walkable:
-                    walkTarget.transform.position = clickPoint;
-                    aiCharacterControl.SetTarget(walkTarget.transform);
-                    break;
-                case enemy:
-                    aiCharacterControl.SetTarget(raycastHit.collider.gameObject.transform);
-                    break;
-                default:
-                    break;
+                walkTarget.transform.position = destination;
+                aiCharacterControl.SetTarget(walkTarget.transform);
+            }
+        }
+
+        private void OnMouseOverEnemy(Enemy enemy)
+        {
+            if(Input.GetMouseButton(0) == true || Input.GetMouseButtonDown(1) == true)
+            {
+                aiCharacterControl.SetTarget(enemy.transform);
             }
         }
 
