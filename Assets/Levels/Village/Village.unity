@@ -1346,7 +1346,7 @@ Prefab:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    m_TransformParent: {fileID: 0}
+    m_TransformParent: {fileID: 1722327827}
     m_Modifications:
     - target: {fileID: 4440512677304210, guid: e6a2bdcb5e084434db227cacda71b628, type: 2}
       propertyPath: m_LocalPosition.x
@@ -1378,7 +1378,15 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4440512677304210, guid: e6a2bdcb5e084434db227cacda71b628, type: 2}
       propertyPath: m_RootOrder
-      value: 7
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4440512677304210, guid: e6a2bdcb5e084434db227cacda71b628, type: 2}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4440512677304210, guid: e6a2bdcb5e084434db227cacda71b628, type: 2}
+      propertyPath: m_LocalScale.z
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: e6a2bdcb5e084434db227cacda71b628, type: 2}
@@ -2345,19 +2353,19 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 496262, guid: c45965e207784314aa9e85abaa3e048c, type: 2}
       propertyPath: m_LocalRotation.x
-      value: 0.53267515
+      value: 0.5326752
       objectReference: {fileID: 0}
     - target: {fileID: 496262, guid: c45965e207784314aa9e85abaa3e048c, type: 2}
       propertyPath: m_LocalRotation.y
-      value: 0.07034045
+      value: 0.070340455
       objectReference: {fileID: 0}
     - target: {fileID: 496262, guid: c45965e207784314aa9e85abaa3e048c, type: 2}
       propertyPath: m_LocalRotation.z
-      value: 0.83613265
+      value: 0.83613276
       objectReference: {fileID: 0}
     - target: {fileID: 496262, guid: c45965e207784314aa9e85abaa3e048c, type: 2}
       propertyPath: m_LocalRotation.w
-      value: -0.11041513
+      value: -0.110415146
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: c45965e207784314aa9e85abaa3e048c, type: 2}
@@ -2785,6 +2793,12 @@ Prefab:
       value: 
       objectReference: {fileID: 11400000, guid: 202ba089adca6504db8fcbe11f4ce2b3,
         type: 2}
+    - target: {fileID: 114042323830866346, guid: db4bcfd08d4fdc6438fc930a1d9a9998,
+        type: 2}
+      propertyPath: ability1
+      value: 
+      objectReference: {fileID: 11400000, guid: 5c6181e73f2419742a0202376033b9ee,
+        type: 2}
     m_RemovedComponents:
     - {fileID: 114577045834895044, guid: db4bcfd08d4fdc6438fc930a1d9a9998, type: 2}
   m_ParentPrefab: {fileID: 100100000, guid: db4bcfd08d4fdc6438fc930a1d9a9998, type: 2}
@@ -2807,7 +2821,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   energyBar: {fileID: 1459570938}
   maxEnergyPounts: 100
-  pointsPerHit: 10
 --- !u!1 &2051745796
 GameObject:
   m_ObjectHideFlags: 0

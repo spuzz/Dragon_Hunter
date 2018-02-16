@@ -13,16 +13,17 @@ namespace RPG.Characters
 
         [SerializeField] float maxHealthPoints = 100f;
         [SerializeField] float damagePerHit = 10f;
-
         [SerializeField] Weapon weaponInUse;
         [SerializeField] AnimatorOverrideController animatorOverrideController;
+        [SerializeField] List<SpecialAbilityConfig> abilities;
+
 
         Animator animator;
         GameObject currentTarget;
         CameraRaycaster cameraRaycaster;
         float lastHitTime = 0;
         float currentHealthPoints;
-
+        Energy energy;
         public float healthAsPercentage { get { return currentHealthPoints / (float)maxHealthPoints; } }
 
         void Start()
@@ -31,6 +32,8 @@ namespace RPG.Characters
             SetDefaultStats();
             PutWeaponInHand();
             OverrideAnimatorController();
+            abilities[0].AddComponent(gameObject);
+            energy = GetComponent<Energy>();
         }
 
         private void SetDefaultStats()
@@ -80,7 +83,23 @@ namespace RPG.Characters
             {
                 AttackTarget(enemy);
             }
+            if (Input.GetMouseButtonDown(1))
+            {
+                AttemptSpecialAbility(0,enemy);
+            }
 
+        }
+
+        private void AttemptSpecialAbility(int index, Enemy enemy)
+        {
+            
+            if (energy.IsEnergyAvailable(10f))
+            {
+                energy.ConsumeEnergy(10f);
+                abilities[0].Use();
+            }
+                
+            
         }
 
         private void AttackTarget(Enemy enemy)
