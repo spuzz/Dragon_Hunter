@@ -8,8 +8,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 80e429ac5459ad645b82a289479e1e67, type: 3}
-  m_Name: PowerAttack1
+  m_Script: {fileID: 11500000, guid: 94061ead3d7c3ee46b1259f6f5674f42, type: 3}
+  m_Name: Whirlwind
   m_EditorClassIdentifier: 
-  energyCost: 25
-  extraDamage: 10
+  energyCost: 50
+  damage: 15
+  radius: 5

@@ -8,9 +8,9 @@ namespace RPG.Characters
     {
         public PowerAttackConfig config { set; get; }
 
-        public void Use()
+        public void Use(AbilityUseParams abilityUseParams)
         {
-
+            abilityUseParams.target.TakeDamage(abilityUseParams.baseDamage + config.GetExtraDamage());
         }
     }
 }
