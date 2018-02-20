@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Name: Whirlwind
   m_EditorClassIdentifier: 
   energyCost: 50
-  damage: 15
+  damage: 40
   radius: 5
