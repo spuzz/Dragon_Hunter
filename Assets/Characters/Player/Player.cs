@@ -6,6 +6,8 @@ using UnityEngine.Assertions;
 using RPG.CameraUI;
 using RPG.Weapons;
 using RPG.Core;
+using UnityEngine.SceneManagement;
+
 namespace RPG.Characters
 {
     public class Player : MonoBehaviour, IDamageable
@@ -16,8 +18,10 @@ namespace RPG.Characters
         [SerializeField] Weapon weaponInUse;
         [SerializeField] AnimatorOverrideController animatorOverrideController;
         [SerializeField] List<SpecialAbility> abilities;
+        [SerializeField] AudioClip[] damageSounds;
+        [SerializeField] AudioClip[] deathSounds;
 
-
+        AudioSource source;
         Animator animator;
         GameObject currentTarget;
         CameraRaycaster cameraRaycaster;
@@ -34,6 +38,7 @@ namespace RPG.Characters
             OverrideAnimatorController();
             abilities[0].AddComponent(gameObject);
             energy = GetComponent<Energy>();
+            source = GetComponent<AudioSource>();
         }
 
         private void SetDefaultStats()
@@ -74,9 +79,34 @@ namespace RPG.Characters
 
         void IDamageable.TakeDamage(float damage)
         {
-            currentHealthPoints = Mathf.Clamp(currentHealthPoints - damage, 0, maxHealthPoints);
-            //if(currentHealthPoints <= 0) { Destroy(gameObject);  }
+            
+            ReduceHealth(damage);
+
+            if (currentHealthPoints <= Mathf.Epsilon)
+            {
+                StartCoroutine(KillPlayer());
+            }
         }
+
+        private IEnumerator KillPlayer()
+        {
+            source.clip = deathSounds[UnityEngine.Random.Range(0, deathSounds.Length)];
+            source.Play();
+            animator.SetTrigger("Death");
+            yield return new WaitForSeconds(source.clip.length);
+            SceneManager.LoadScene(0);
+        }
+
+        private void ReduceHealth(float damage)
+        {
+            currentHealthPoints = Mathf.Clamp(currentHealthPoints - damage, 0, maxHealthPoints);
+            if (source.isPlaying == false)
+            {
+                source.clip = damageSounds[UnityEngine.Random.Range(0, damageSounds.Length)];
+                source.Play();
+            }
+        }
+
         private void ProcessMouseOverEnemy(Enemy enemy)
         {
             if (Input.GetMouseButton(0))

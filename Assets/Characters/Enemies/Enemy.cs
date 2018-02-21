@@ -22,7 +22,7 @@ namespace RPG.Characters
         bool isAttacking = false;
 
         float currentHealthPoints;
-        ThirdPersonCharacter thirdPersonCharacter;
+        Player player = null;
         AICharacterControl aiCharacterControl = null;
         public float healthAsPercentage { get { return currentHealthPoints / (float)maxHealthPoints; } }
 
@@ -37,14 +37,19 @@ namespace RPG.Characters
 
         public void Start()
         {
-            thirdPersonCharacter = GameObject.FindGameObjectWithTag("Player").GetComponent<ThirdPersonCharacter>();
+            player = FindObjectOfType<Player>();
             aiCharacterControl = GetComponent<AICharacterControl>();
             currentHealthPoints = maxHealthPoints;
         }
 
         public void Update()
         {
-            float distancetoPlayer = Vector3.Distance(thirdPersonCharacter.transform.position, transform.position);
+            if(player.healthAsPercentage <= Mathf.Epsilon)
+            {
+                StopAllCoroutines();
+                Destroy(this);
+            }
+            float distancetoPlayer = Vector3.Distance(player.transform.position, transform.position);
 
             if (distancetoPlayer <= attackRadius && !isAttacking)
             {
@@ -60,7 +65,7 @@ namespace RPG.Characters
 
             if (distancetoPlayer <= chaseRadius)
             {
-                aiCharacterControl.SetTarget(thirdPersonCharacter.transform);
+                aiCharacterControl.SetTarget(player.transform);
             }
             else
             {
@@ -76,7 +81,7 @@ namespace RPG.Characters
             projectileComponent.SetDamage(damagePerShot);
             projectileComponent.SetShooter(gameObject);
 
-            Vector3 unitVectorToPlayer = (thirdPersonCharacter.transform.position + aimOffset - projectileSocket.transform.position).normalized;
+            Vector3 unitVectorToPlayer = (player.transform.position + aimOffset - projectileSocket.transform.position).normalized;
             newProjectile.GetComponent<Rigidbody>().velocity = unitVectorToPlayer * projectileComponent.GetDefaultLaunchSpeed();
 
         }

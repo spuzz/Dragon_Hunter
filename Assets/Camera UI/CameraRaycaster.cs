@@ -14,6 +14,8 @@ namespace RPG.CameraUI
         [SerializeField] Vector2 cursorHotspot = new Vector2(0, 0);
         [SerializeField] Texture2D walkCursor = null;
         [SerializeField] Texture2D enemyCursor = null;
+
+        Rect screenRect = new Rect(0, 0, Screen.width, Screen.height);
         // New Delegates
         public delegate void OnMouseOverEnemy(Enemy enemy); // declare new delegate type
         public event OnMouseOverEnemy onMouseOverEnemy; // instantiate an observer set
@@ -35,9 +37,13 @@ namespace RPG.CameraUI
         }
         void PerformRayCasts()
         {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            if (RayCastForEnemy(ray)) { return; }
-            if (RayCastForWalkable(ray)) { return; }
+            if (screenRect.Contains(Input.mousePosition))
+            {
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                if (RayCastForEnemy(ray)) { return; }
+                if (RayCastForWalkable(ray)) { return; }
+            }
+
         }
 
         private bool RayCastForEnemy(Ray ray)
