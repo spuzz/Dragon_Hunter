@@ -25,6 +25,7 @@ namespace RPG.CameraUI
 
         void Update()
         {
+            screenRect = new Rect(0, 0, Screen.width, Screen.height);
             // Check if pointer is over an interactable UI element
             if (EventSystem.current.IsPointerOverGameObject())
             {

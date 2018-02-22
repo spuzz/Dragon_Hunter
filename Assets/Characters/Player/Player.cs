@@ -36,7 +36,10 @@ namespace RPG.Characters
             SetDefaultStats();
             PutWeaponInHand();
             OverrideAnimatorController();
-            abilities[0].AddComponent(gameObject);
+            foreach(SpecialAbility ability in abilities)
+            {
+                ability.AddComponent(gameObject);
+            }
             energy = GetComponent<Energy>();
             source = GetComponent<AudioSource>();
         }
@@ -117,7 +120,14 @@ namespace RPG.Characters
             {
                 AttemptSpecialAbility(0,enemy);
             }
-
+            if (Input.GetKeyDown("0"))
+            {
+                AttemptSpecialAbility(0, enemy);
+            }
+            if (Input.GetKeyDown("1"))
+            {
+                AttemptSpecialAbility(1, enemy);
+            }
         }
 
         private void AttemptSpecialAbility(int index, Enemy enemy)
