@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,7 +11,27 @@ namespace RPG.Characters
 
         public void Use(AbilityUseParams abilityUseParams)
         {
-            Collider[] hits = Physics.OverlapSphere(abilityUseParams.targetLocation.position,config.GetRadius());
+            DealAoeDamage(abilityUseParams);
+            PlayParticleEffect();
+        }
+
+        private void PlayParticleEffect()
+        {
+            GameObject particles = config.GetParticlePrefab();
+            
+            if (particles != null)
+            {
+                var prefab = Instantiate(particles, gameObject.transform.position, Quaternion.identity);
+                prefab.transform.parent = transform;
+                ParticleSystem wwParticleSystem = prefab.GetComponent<ParticleSystem>();
+                wwParticleSystem.Play();
+                Destroy(prefab, wwParticleSystem.main.duration + 1);
+            }
+        }
+
+        private void DealAoeDamage(AbilityUseParams abilityUseParams)
+        {
+            Collider[] hits = Physics.OverlapSphere(gameObject.transform.position, config.GetRadius());
             foreach (Collider hit in hits)
             {
                 Enemy enemy = hit.gameObject.GetComponent<Enemy>();

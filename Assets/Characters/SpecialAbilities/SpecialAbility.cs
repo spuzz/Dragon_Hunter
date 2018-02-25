@@ -6,13 +6,11 @@ namespace RPG.Characters
 {
     public struct AbilityUseParams
     {
-        public Transform targetLocation;
         public IDamageable target;
         public float baseDamage;
 
-        public AbilityUseParams(IDamageable nTarget, float nBaseDamage, Transform targetLocation)
+        public AbilityUseParams(IDamageable nTarget, float nBaseDamage)
         {
-            this.targetLocation = targetLocation;
             target = nTarget;
             baseDamage = nBaseDamage;
         }
@@ -22,8 +20,9 @@ namespace RPG.Characters
     {
 
         [Header("Special Ability General")]
-        [SerializeField]
-        float energyCost = 10f;
+        [SerializeField] float energyCost = 10f;
+        [SerializeField] GameObject particlePrefab = null;
+        [SerializeField] AudioClip audioClip;
 
         protected ISpecialAbility behaviour;
         abstract public void AddComponent(GameObject gameObjectToAttachTo);
@@ -36,6 +35,16 @@ namespace RPG.Characters
         public float GetEnergyCost()
         {
             return energyCost;
+        }
+
+        public GameObject GetParticlePrefab()
+        {
+            return particlePrefab;
+        }
+
+        public AudioClip GetAudioClip()
+        {
+            return audioClip;
         }
 
     }

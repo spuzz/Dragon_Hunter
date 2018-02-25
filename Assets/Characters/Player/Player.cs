@@ -21,6 +21,11 @@ namespace RPG.Characters
         [SerializeField] AudioClip[] damageSounds;
         [SerializeField] AudioClip[] deathSounds;
 
+        [Range(.1f, 1.0f)] [SerializeField] float criticalHitChance = 0.1f;
+        [SerializeField] float criticalHitMultiplier = 1.5f;
+        [SerializeField] ParticleSystem criticalParticleSystem = null;
+
+        Enemy currentEnemy = null;
         AudioSource source;
         Animator animator;
         GameObject currentTarget;
@@ -29,6 +34,7 @@ namespace RPG.Characters
         float currentHealthPoints;
         Energy energy;
         public float healthAsPercentage { get { return currentHealthPoints / (float)maxHealthPoints; } }
+        
 
         void Start()
         {
@@ -42,6 +48,26 @@ namespace RPG.Characters
             }
             energy = GetComponent<Energy>();
             source = GetComponent<AudioSource>();
+        }
+
+        void Update()
+        {
+            if(healthAsPercentage > Mathf.Epsilon)
+            {
+                ScanForAbilityKeyDown();
+            }
+        }
+
+        private void ScanForAbilityKeyDown()
+        {
+            for(int keyIndex = 1; keyIndex < abilities.Count; keyIndex++)
+            {
+                if (Input.GetKeyDown(keyIndex.ToString()))
+                {
+                    AttemptSpecialAbility(keyIndex);
+                }
+            }
+   
         }
 
         private void SetDefaultStats()
@@ -80,7 +106,7 @@ namespace RPG.Characters
             cameraRaycaster.onMouseOverEnemy += ProcessMouseOverEnemy;
         }
 
-        void IDamageable.TakeDamage(float damage)
+        public void TakeDamage(float damage)
         {
             
             ReduceHealth(damage);
@@ -89,6 +115,13 @@ namespace RPG.Characters
             {
                 StartCoroutine(KillPlayer());
             }
+        }
+
+        public void Heal(float health)
+        {
+
+            IncreaseHealth(health);
+
         }
 
         private IEnumerator KillPlayer()
@@ -110,33 +143,39 @@ namespace RPG.Characters
             }
         }
 
-        private void ProcessMouseOverEnemy(Enemy enemy)
+        private void IncreaseHealth(float heal)
         {
-            if (Input.GetMouseButton(0))
-            {
-                AttackTarget(enemy);
-            }
-            if (Input.GetMouseButtonDown(1))
-            {
-                AttemptSpecialAbility(0,enemy);
-            }
-            if (Input.GetKeyDown("0"))
-            {
-                AttemptSpecialAbility(0, enemy);
-            }
-            if (Input.GetKeyDown("1"))
-            {
-                AttemptSpecialAbility(1, enemy);
-            }
+            currentHealthPoints = Mathf.Clamp(currentHealthPoints + heal, 0, maxHealthPoints);
+
         }
 
-        private void AttemptSpecialAbility(int index, Enemy enemy)
+        private void ProcessMouseOverEnemy(Enemy enemy)
+        {
+            currentEnemy = enemy;
+            if(IsTargetInRange(enemy.gameObject))
+            {
+                if (Input.GetMouseButton(0))
+                {
+                    AttackTarget(enemy);
+                }
+                if (Input.GetMouseButtonDown(1))
+                {
+                    AttemptSpecialAbility(0);
+                }
+            }
+  
+
+        }
+
+        private void AttemptSpecialAbility(int index)
         {
             var energyCost = abilities[index].GetEnergyCost();
             if (energy.IsEnergyAvailable(energyCost))
             {
                 energy.ConsumeEnergy(energyCost);
-                var abilityParams = new AbilityUseParams(enemy,baseDamage,enemy.transform);
+                source.clip = abilities[index].GetAudioClip();
+                source.Play();
+                var abilityParams = new AbilityUseParams(currentEnemy, baseDamage);
                 abilities[index].Use(abilityParams);
             }
                 
@@ -149,9 +188,26 @@ namespace RPG.Characters
             if (Time.time - lastHitTime > weaponInUse.GetMinTimeBetweenHits())
             {
                 animator.SetTrigger("Attack");
-                enemy.TakeDamage(baseDamage);
+                enemy.TakeDamage(CalculateDamage());
                 lastHitTime = Time.time;
             }
+        }
+
+        private float CalculateDamage()
+        {
+            if (UnityEngine.Random.Range(0.0f, 1.0f) <= criticalHitChance)
+            {
+                print("Critical Hit");
+                criticalParticleSystem.Play();
+                return baseDamage + weaponInUse.GetAdditionalDamage() * criticalHitMultiplier;
+            }
+            else
+            {
+                print("Normal Hit");
+                return baseDamage + weaponInUse.GetAdditionalDamage();
+            }
+          
+            
         }
 
         private bool IsTargetInRange(GameObject target)

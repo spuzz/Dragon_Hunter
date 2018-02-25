@@ -12,5 +12,8 @@ MonoBehaviour:
   m_Name: Whirlwind
   m_EditorClassIdentifier: 
   energyCost: 50
+  particlePrefab: {fileID: 1948481063528586, guid: 11e3a4b39c4b7024086097aa95b5d5f2,
+    type: 2}
+  audioClip: {fileID: 8300000, guid: a4a26eb59a9e5c74f833227787d77261, type: 3}
   damage: 40
   radius: 5
