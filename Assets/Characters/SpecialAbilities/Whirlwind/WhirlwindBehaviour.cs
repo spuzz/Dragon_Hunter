@@ -21,11 +21,11 @@ namespace RPG.Characters
             
             if (particles != null)
             {
-                var prefab = Instantiate(particles, gameObject.transform.position, Quaternion.identity);
+                var prefab = Instantiate(particles, gameObject.transform.position, particles.transform.rotation);
                 prefab.transform.parent = transform;
                 ParticleSystem wwParticleSystem = prefab.GetComponent<ParticleSystem>();
                 wwParticleSystem.Play();
-                Destroy(prefab, wwParticleSystem.main.duration + 1);
+                Destroy(prefab, wwParticleSystem.main.duration + wwParticleSystem.main.startLifetime.constant);
             }
         }
 
