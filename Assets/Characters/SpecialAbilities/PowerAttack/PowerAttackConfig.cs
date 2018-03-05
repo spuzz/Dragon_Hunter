@@ -5,7 +5,7 @@ using UnityEngine;
 namespace RPG.Characters
 {
     [CreateAssetMenu(menuName =("RPG/Special Ability/PowerAttack"))]
-    public class PowerAttackConfig : SpecialAbility
+    public class PowerAttackConfig : AbilityConfig
     {
         [Header("Power Attack Specific")]
         [SerializeField]
@@ -14,7 +14,7 @@ namespace RPG.Characters
         public override void AddComponent(GameObject gameObjectToAttachTo)
         {
             var behaviourComponent = gameObjectToAttachTo.AddComponent<PowerAttackBehaviour>();
-            behaviourComponent.config = this;
+            behaviourComponent.SetConfig(this);
             behaviour = behaviourComponent;
         }
 

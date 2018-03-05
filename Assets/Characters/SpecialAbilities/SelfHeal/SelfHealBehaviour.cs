@@ -5,30 +5,17 @@ using UnityEngine;
 
 namespace RPG.Characters
 {
-    public class SelfHealBehaviour : MonoBehaviour, ISpecialAbility
+    public class SelfHealBehaviour : AbilityBehaviour
     {
-        public SelfHealConfig config { set; get; }
 
-        public void Use(AbilityUseParams abilityUseParams)
+        public override void Use(AbilityUseParams abilityUseParams)
         {
-            gameObject.GetComponent<Player>().Heal(config.GetHeal());
+            gameObject.GetComponent<Player>().Heal((config as SelfHealConfig).GetHeal());
             PlayParticleEffect();
         }
 
 
-        private void PlayParticleEffect()
-        {
-            GameObject particles = config.GetParticlePrefab();
 
-            if (particles != null)
-            {
-                var prefab = Instantiate(particles, gameObject.transform.position, particles.transform.rotation);
-                prefab.transform.parent = transform;
-                ParticleSystem wwParticleSystem = prefab.GetComponent<ParticleSystem>();
-                wwParticleSystem.Play();
-                Destroy(prefab, wwParticleSystem.main.duration + wwParticleSystem.main.startLifetime.constant);
-            }
-        }
 
     }
 }

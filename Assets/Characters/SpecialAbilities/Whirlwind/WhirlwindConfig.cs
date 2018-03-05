@@ -5,7 +5,7 @@ using UnityEngine;
 namespace RPG.Characters
 {
     [CreateAssetMenu(menuName =("RPG/Special Ability/Whirlwind"))]
-    public class WhirlwindConfig : SpecialAbility
+    public class WhirlwindConfig : AbilityConfig
     {
         [Header("Whirlwind Specific")]
         [SerializeField] float damage = 15f;
@@ -14,7 +14,7 @@ namespace RPG.Characters
         public override void AddComponent(GameObject gameObjectToAttachTo)
         {
             var behaviourComponent = gameObjectToAttachTo.AddComponent<WhirlwindBehaviour>();
-            behaviourComponent.config = this;
+            behaviourComponent.SetConfig(this);
             behaviour = behaviourComponent;
         }
 

@@ -17,7 +17,7 @@ namespace RPG.Characters
         [SerializeField] float baseDamage = 10f;
         [SerializeField] Weapon weaponInUse;
         [SerializeField] AnimatorOverrideController animatorOverrideController;
-        [SerializeField] List<SpecialAbility> abilities;
+        [SerializeField] List<AbilityConfig> abilities;
         [SerializeField] AudioClip[] damageSounds;
         [SerializeField] AudioClip[] deathSounds;
 
@@ -42,7 +42,7 @@ namespace RPG.Characters
             SetDefaultStats();
             PutWeaponInHand();
             OverrideAnimatorController();
-            foreach(SpecialAbility ability in abilities)
+            foreach(AbilityConfig ability in abilities)
             {
                 ability.AddComponent(gameObject);
             }

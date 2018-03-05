@@ -16,7 +16,7 @@ namespace RPG.Characters
         }
     }
 
-    public abstract class SpecialAbility : ScriptableObject
+    public abstract class AbilityConfig : ScriptableObject
     {
 
         [Header("Special Ability General")]
@@ -24,7 +24,7 @@ namespace RPG.Characters
         [SerializeField] GameObject particlePrefab = null;
         [SerializeField] AudioClip audioClip;
 
-        protected ISpecialAbility behaviour;
+        protected AbilityBehaviour behaviour;
         abstract public void AddComponent(GameObject gameObjectToAttachTo);
 
         public void Use(AbilityUseParams abilityUseParams)
@@ -47,10 +47,6 @@ namespace RPG.Characters
             return audioClip;
         }
 
-    }
-    public interface ISpecialAbility
-    {
-        void Use(AbilityUseParams abilityUseParams);
     }
 }
 
