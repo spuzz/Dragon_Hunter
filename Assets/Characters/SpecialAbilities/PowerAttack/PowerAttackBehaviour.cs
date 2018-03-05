@@ -11,6 +11,7 @@ namespace RPG.Characters
         {
             abilityUseParams.target.TakeDamage(abilityUseParams.baseDamage + (config as PowerAttackConfig).GetExtraDamage());
             PlayParticleEffect();
+            PlayAbilitySound();
         }
     }
 }

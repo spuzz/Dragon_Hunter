@@ -11,11 +11,10 @@ namespace RPG.Characters
         [SerializeField] float damage = 15f;
         [SerializeField] float radius = 5f;
 
-        public override void AddComponent(GameObject gameObjectToAttachTo)
+        public override AbilityBehaviour GetBehaviourComponent(GameObject gameObjectToAttachTo)
         {
-            var behaviourComponent = gameObjectToAttachTo.AddComponent<WhirlwindBehaviour>();
-            behaviourComponent.SetConfig(this);
-            behaviour = behaviourComponent;
+            return gameObjectToAttachTo.AddComponent<WhirlwindBehaviour>();
+
         }
 
         public float GetRadius()

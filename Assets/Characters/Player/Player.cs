@@ -173,8 +173,6 @@ namespace RPG.Characters
             if (energy.IsEnergyAvailable(energyCost))
             {
                 energy.ConsumeEnergy(energyCost);
-                source.clip = abilities[index].GetAudioClip();
-                source.Play();
                 var abilityParams = new AbilityUseParams(currentEnemy, baseDamage);
                 abilities[index].Use(abilityParams);
             }

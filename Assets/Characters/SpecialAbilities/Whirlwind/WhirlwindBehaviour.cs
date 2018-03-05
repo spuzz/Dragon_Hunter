@@ -12,6 +12,7 @@ namespace RPG.Characters
         {
             DealAoeDamage(abilityUseParams);
             PlayParticleEffect();
+            PlayAbilitySound();
         }
 
 
