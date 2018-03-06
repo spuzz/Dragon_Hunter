@@ -40,7 +40,7 @@ namespace RPG.Characters
         {
             RegisterMouseClick();
             SetDefaultStats();
-            PutWeaponInHand();
+            PutWeaponInHand(weaponInUse);
             OverrideAnimatorController();
             foreach(AbilityConfig ability in abilities)
             {
@@ -82,13 +82,13 @@ namespace RPG.Characters
             animatorOverrideController["Default Attack"] = weaponInUse.GetAttackAnimation();
         }
 
-        private void PutWeaponInHand()
+        public void PutWeaponInHand(Weapon weaponConfig)
         {
-            var weaponPrefab = weaponInUse.GetWeaponPrefab();
+            var weaponPrefab = weaponConfig.GetWeaponPrefab();
             GameObject dominantHand = RequestDominantHand();
             var weapon = Instantiate(weaponPrefab, dominantHand.transform);
-            weapon.transform.localPosition = weaponInUse.gripTransform.localPosition;
-            weapon.transform.localRotation = weaponInUse.gripTransform.localRotation;
+            weapon.transform.localPosition = weaponConfig.gripTransform.localPosition;
+            weapon.transform.localRotation = weaponConfig.gripTransform.localRotation;
         }
 
         private GameObject RequestDominantHand()

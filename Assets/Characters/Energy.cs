@@ -48,7 +48,7 @@ namespace RPG.Characters
 
         private void UpdateEnergyBar()
         {
-            float xValue = -(energyAsPercentage / 2f) - 0.5f;
+            //float xValue = -(energyAsPercentage / 2f) - 0.5f;
             energyBar.fillAmount = energyAsPercentage;
         }
     }
