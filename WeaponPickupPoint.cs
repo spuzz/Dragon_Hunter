@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using RPG.Characters;
 
-namespace RPG.Weapons
+namespace RPG.Characters
 {
     [ExecuteInEditMode]
     public class WeaponPickupPoint : MonoBehaviour
@@ -55,7 +55,7 @@ namespace RPG.Weapons
             var audioSource = GetComponent<AudioSource>();
             audioSource.PlayOneShot(pickUpSFX);
             GetComponent<CapsuleCollider>().enabled = false;
-            //Destroy(gameObject);
+            Destroy(gameObject);
         }
     }
 

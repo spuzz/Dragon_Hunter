@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
 using RPG.CameraUI;
-using RPG.Weapons;
+
 using RPG.Core;
 using UnityEngine.SceneManagement;
 
@@ -15,7 +15,7 @@ namespace RPG.Characters
 
         [SerializeField] float maxHealthPoints = 100f;
         [SerializeField] float baseDamage = 10f;
-        [SerializeField] Weapon weaponInUse;
+        [SerializeField] Weapon currentWeaponConfig;
         [SerializeField] AnimatorOverrideController animatorOverrideController;
         [SerializeField] List<AbilityConfig> abilities;
         [SerializeField] AudioClip[] damageSounds;
@@ -33,6 +33,9 @@ namespace RPG.Characters
         float lastHitTime = 0;
         float currentHealthPoints;
         Energy energy;
+        GameObject weaponObject;
+
+        const string DEFAULT_ATTACK = "Default Attack";
         public float healthAsPercentage { get { return currentHealthPoints / (float)maxHealthPoints; } }
         
 
@@ -40,8 +43,8 @@ namespace RPG.Characters
         {
             RegisterMouseClick();
             SetDefaultStats();
-            PutWeaponInHand(weaponInUse);
-            OverrideAnimatorController();
+            PutWeaponInHand(currentWeaponConfig);
+            SetAttackAnimation();
             foreach(AbilityConfig ability in abilities)
             {
                 ability.AddComponent(gameObject);
@@ -75,24 +78,27 @@ namespace RPG.Characters
             currentHealthPoints = maxHealthPoints;
         }
 
-        private void OverrideAnimatorController()
+        private void SetAttackAnimation()
         {
             animator = GetComponent<Animator>();
             animator.runtimeAnimatorController = animatorOverrideController;
-            animatorOverrideController["Default Attack"] = weaponInUse.GetAttackAnimation();
+            animatorOverrideController[DEFAULT_ATTACK] = currentWeaponConfig.GetAttackAnimation();
         }
 
         public void PutWeaponInHand(Weapon weaponConfig)
         {
-            var weaponPrefab = weaponConfig.GetWeaponPrefab();
+            currentWeaponConfig = weaponConfig;
+            var weaponPrefab = currentWeaponConfig.GetWeaponPrefab();
             GameObject dominantHand = RequestDominantHand();
-            var weapon = Instantiate(weaponPrefab, dominantHand.transform);
-            weapon.transform.localPosition = weaponConfig.gripTransform.localPosition;
-            weapon.transform.localRotation = weaponConfig.gripTransform.localRotation;
+            Destroy(weaponObject);
+            weaponObject = Instantiate(weaponPrefab, dominantHand.transform);
+            weaponObject.transform.localPosition = weaponConfig.gripTransform.localPosition;
+            weaponObject.transform.localRotation = weaponConfig.gripTransform.localRotation;
         }
 
         private GameObject RequestDominantHand()
         {
+             
             var dominantHands = GetComponentsInChildren<DominantHand>();
             int numberOfDominantHands = dominantHands.Length;
             Assert.IsFalse(numberOfDominantHands < 0, "No DominantHand found on Player, Please add one");
@@ -183,8 +189,9 @@ namespace RPG.Characters
         private void AttackTarget(Enemy enemy)
         {
             
-            if (Time.time - lastHitTime > weaponInUse.GetMinTimeBetweenHits())
+            if (Time.time - lastHitTime > currentWeaponConfig.GetMinTimeBetweenHits())
             {
+                SetAttackAnimation();
                 animator.SetTrigger("Attack");
                 enemy.TakeDamage(CalculateDamage());
                 lastHitTime = Time.time;
@@ -197,12 +204,12 @@ namespace RPG.Characters
             {
                 print("Critical Hit");
                 criticalParticleSystem.Play();
-                return baseDamage + weaponInUse.GetAdditionalDamage() * criticalHitMultiplier;
+                return baseDamage + currentWeaponConfig.GetAdditionalDamage() * criticalHitMultiplier;
             }
             else
             {
                 print("Normal Hit");
-                return baseDamage + weaponInUse.GetAdditionalDamage();
+                return baseDamage + currentWeaponConfig.GetAdditionalDamage();
             }
           
             
@@ -211,7 +218,7 @@ namespace RPG.Characters
         private bool IsTargetInRange(GameObject target)
         {
             float distanceToTarget = (target.transform.position - transform.position).magnitude;
-            return distanceToTarget <= weaponInUse.GetMaxAttackRange();
+            return distanceToTarget <= currentWeaponConfig.GetMaxAttackRange();
         }
     }
 
