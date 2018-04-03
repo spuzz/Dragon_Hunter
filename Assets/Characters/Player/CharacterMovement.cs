@@ -6,54 +6,51 @@ using RPG.CameraUI;
 namespace RPG.Characters
 {
     [RequireComponent(typeof(NavMeshAgent))]
-    [RequireComponent(typeof(AICharacterControl))]
     [RequireComponent(typeof(ThirdPersonCharacter))]
 
-    public class PlayerMovement : MonoBehaviour
+    public class CharacterMovement : MonoBehaviour
     {
 
-        [SerializeField] const int walkable = 8;
-        [SerializeField] const int enemy = 9;
-        [SerializeField] const int unknown = 10;
+        [SerializeField] float stoppingDistance = 1;
 
-        ThirdPersonCharacter thirdPersonCharacter;   // A reference to the ThirdPersonCharacter on the object
-        AICharacterControl aiCharacterControl = null;
-        CameraRaycaster cameraRaycaster;
+        ThirdPersonCharacter character;   // A reference to the ThirdPersonCharacter on the object
         Vector3 CurrentDestination, clickPoint;
-        bool isInDirectMode = false;
         GameObject walkTarget = null;
+        NavMeshAgent navAgent;
 
         private void Start()
         {
-            cameraRaycaster = Camera.main.GetComponent<CameraRaycaster>();
-            thirdPersonCharacter = GetComponent<ThirdPersonCharacter>();
-            aiCharacterControl = GetComponent<AICharacterControl>();
+            CameraRaycaster cameraRaycaster = Camera.main.GetComponent<CameraRaycaster>();
+            character = GetComponent<ThirdPersonCharacter>();
 
             cameraRaycaster.onMouseOverTerrain += ProcessMouseOverTerrain;
             cameraRaycaster.onMouseOverEnemy += OnMouseOverEnemy;
             CurrentDestination = transform.position;
             walkTarget = new GameObject("WalkTarget");
+            navAgent = GetComponent<NavMeshAgent>();
+            navAgent.updateRotation = false;
+            navAgent.updatePosition = true;
+            navAgent.stoppingDistance = stoppingDistance;
         }
 
 
-        private void ProcessDirectMovement()
+        private void Update()
         {
-            float h = Input.GetAxis("Horizontal");
-            float v = Input.GetAxis("Vertical");
-
-            Vector3 cameraForward = Vector3.Scale(Camera.main.transform.forward, new Vector3(1, 0, 1)).normalized;
-            Vector3 movement = v * cameraForward + h * Camera.main.transform.right;
-
-            thirdPersonCharacter.Move(movement, false, false);
-
+            if (navAgent.remainingDistance > navAgent.stoppingDistance)
+            {
+                character.Move(navAgent.desiredVelocity);
+            }
+            else
+            {
+                character.Move(Vector3.zero);
+            }
         }
-
         private void ProcessMouseOverTerrain(Vector3 destination)
         {
             if(Input.GetMouseButton(0) == true)
             {
                 walkTarget.transform.position = destination;
-                aiCharacterControl.SetTarget(walkTarget.transform);
+                navAgent.SetDestination(walkTarget.transform.position);
             }
         }
 
@@ -61,7 +58,7 @@ namespace RPG.Characters
         {
             if(Input.GetMouseButton(0) == true || Input.GetMouseButtonDown(1) == true)
             {
-                aiCharacterControl.SetTarget(enemy.transform);
+                navAgent.SetDestination(enemy.transform.position);
             }
         }
 

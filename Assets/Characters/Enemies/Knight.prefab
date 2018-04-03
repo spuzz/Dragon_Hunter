@@ -659,7 +659,6 @@ GameObject:
   - component: {fileID: 13615390}
   - component: {fileID: 11469404}
   - component: {fileID: 114892140561228846}
-  - component: {fileID: 114552203131183126}
   - component: {fileID: 195656288050310694}
   m_Layer: 9
   m_Name: Knight
@@ -2760,18 +2759,6 @@ Transform:
   m_Father: {fileID: 408730}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &114552203131183126
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 149790}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8c5335f0882fe4d478883cc8c58ce906, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  target: {fileID: 408730}
 --- !u!114 &114742803157905800
 MonoBehaviour:
   m_ObjectHideFlags: 1
