@@ -24,6 +24,28 @@ namespace RPG.Characters
         Rigidbody charRigidBody;
         float m_TurnAmount;
         float m_ForwardAmount;
+        public void OnAnimatorMove()
+        {
+            if (Time.deltaTime > 0)
+            {
+                Vector3 v = (animator.deltaPosition * moveSpeedMultiplier) / Time.deltaTime;
+
+                v.y = charRigidBody.velocity.y;
+                charRigidBody.velocity = v;
+            }
+        }
+
+        public void Kill()
+        {
+
+        }
+
+        public void Move(Vector3 movement)
+        {
+            SetForwardAndTurn(movement);
+            ApplyExtraTurnRotation();
+            UpdateAnimator();
+        }
 
         private void Start()
         {
@@ -66,16 +88,6 @@ namespace RPG.Characters
                 navAgent.SetDestination(walkTarget.transform.position);
             }
         }
-        public void OnAnimatorMove()
-        {
-            if (Time.deltaTime > 0)
-            {
-                Vector3 v = (animator.deltaPosition * moveSpeedMultiplier) / Time.deltaTime;
-
-                v.y = charRigidBody.velocity.y;
-                charRigidBody.velocity = v;
-            }
-        }
 
         private void OnMouseOverEnemy(Enemy enemy)
         {
@@ -93,14 +105,6 @@ namespace RPG.Characters
             Gizmos.DrawSphere(clickPoint, 0.1f);
         }
 
-
-
-        public void Move(Vector3 movement)
-        {
-            SetForwardAndTurn(movement);
-            ApplyExtraTurnRotation();
-            UpdateAnimator();
-        }
 
         private void SetForwardAndTurn(Vector3 movement)
         {

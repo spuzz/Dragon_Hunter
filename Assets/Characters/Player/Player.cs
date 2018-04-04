@@ -10,52 +10,46 @@ using UnityEngine.SceneManagement;
 
 namespace RPG.Characters
 {
-    public class Player : MonoBehaviour, IDamageable
+    public class Player : MonoBehaviour
     {
 
-        [SerializeField] float maxHealthPoints = 100f;
         [SerializeField] float baseDamage = 10f;
         [SerializeField] Weapon currentWeaponConfig;
         [SerializeField] AnimatorOverrideController animatorOverrideController;
-        [SerializeField] List<AbilityConfig> abilities;
-        [SerializeField] AudioClip[] damageSounds;
-        [SerializeField] AudioClip[] deathSounds;
+
+        
 
         [Range(.1f, 1.0f)] [SerializeField] float criticalHitChance = 0.1f;
         [SerializeField] float criticalHitMultiplier = 1.5f;
         [SerializeField] ParticleSystem criticalParticleSystem = null;
 
         Enemy currentEnemy = null;
-        AudioSource source;
+        
         Animator animator;
         GameObject currentTarget;
         CameraRaycaster cameraRaycaster;
         float lastHitTime = 0;
-        float currentHealthPoints;
-        Energy energy;
+
+        SpecialAbilities specialAbilties;
         GameObject weaponObject;
 
         const string DEFAULT_ATTACK = "Default Attack";
-        public float healthAsPercentage { get { return currentHealthPoints / (float)maxHealthPoints; } }
+        
         
 
         void Start()
         {
             RegisterMouseClick();
-            SetDefaultStats();
             PutWeaponInHand(currentWeaponConfig);
             SetAttackAnimation();
-            foreach(AbilityConfig ability in abilities)
-            {
-                ability.AddComponent(gameObject);
-            }
-            energy = GetComponent<Energy>();
-            source = GetComponent<AudioSource>();
+
+            specialAbilties = GetComponent<SpecialAbilities>();
         }
 
         void Update()
         {
-            if(healthAsPercentage > Mathf.Epsilon)
+            var healthPerc = GetComponent<HealthSystem>().healthAsPercentage;
+            if(healthPerc >= 0)
             {
                 ScanForAbilityKeyDown();
             }
@@ -63,19 +57,14 @@ namespace RPG.Characters
 
         private void ScanForAbilityKeyDown()
         {
-            for(int keyIndex = 1; keyIndex < abilities.Count; keyIndex++)
+            for(int keyIndex = 1; keyIndex < specialAbilties.GetNumberOfAbilities(); keyIndex++)
             {
                 if (Input.GetKeyDown(keyIndex.ToString()))
                 {
-                    AttemptSpecialAbility(keyIndex);
+                    specialAbilties.AttemptSpecialAbility(keyIndex);
                 }
             }
    
-        }
-
-        private void SetDefaultStats()
-        {
-            currentHealthPoints = maxHealthPoints;
         }
 
         private void SetAttackAnimation()
@@ -112,48 +101,6 @@ namespace RPG.Characters
             cameraRaycaster.onMouseOverEnemy += ProcessMouseOverEnemy;
         }
 
-        public void TakeDamage(float damage)
-        {
-            
-            ReduceHealth(damage);
-
-            if (currentHealthPoints <= Mathf.Epsilon)
-            {
-                StartCoroutine(KillPlayer());
-            }
-        }
-
-        public void Heal(float health)
-        {
-
-            IncreaseHealth(health);
-
-        }
-
-        private IEnumerator KillPlayer()
-        {
-            source.clip = deathSounds[UnityEngine.Random.Range(0, deathSounds.Length)];
-            source.Play();
-            animator.SetTrigger("Death");
-            yield return new WaitForSeconds(source.clip.length);
-            SceneManager.LoadScene(0);
-        }
-
-        private void ReduceHealth(float damage)
-        {
-            currentHealthPoints = Mathf.Clamp(currentHealthPoints - damage, 0, maxHealthPoints);
-            if (source.isPlaying == false)
-            {
-                source.clip = damageSounds[UnityEngine.Random.Range(0, damageSounds.Length)];
-                source.Play();
-            }
-        }
-
-        private void IncreaseHealth(float heal)
-        {
-            currentHealthPoints = Mathf.Clamp(currentHealthPoints + heal, 0, maxHealthPoints);
-
-        }
 
         private void ProcessMouseOverEnemy(Enemy enemy)
         {
@@ -166,25 +113,13 @@ namespace RPG.Characters
                 }
                 if (Input.GetMouseButtonDown(1))
                 {
-                    AttemptSpecialAbility(0);
+                    specialAbilties.AttemptSpecialAbility(0);
                 }
             }
   
 
         }
 
-        private void AttemptSpecialAbility(int index)
-        {
-            var energyCost = abilities[index].GetEnergyCost();
-            if (energy.IsEnergyAvailable(energyCost))
-            {
-                energy.ConsumeEnergy(energyCost);
-                var abilityParams = new AbilityUseParams(currentEnemy, baseDamage);
-                abilities[index].Use(abilityParams);
-            }
-                
-            
-        }
 
         private void AttackTarget(Enemy enemy)
         {

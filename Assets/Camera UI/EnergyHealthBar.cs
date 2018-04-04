@@ -22,7 +22,7 @@ namespace RPG.Characters
         // Update is called once per frame
         void Update()
         {
-            float xValue = -(player.GetComponent<Energy>().energyAsPercentage / 2f) - 0.5f;
+            float xValue = -(player.GetComponent<SpecialAbilities>().energyAsPercentage / 2f) - 0.5f;
             energyBarRawImage.uvRect = new Rect(xValue, 0f, 0.5f, 1f);
         }
     }

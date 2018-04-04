@@ -495,11 +495,11 @@ GameObject:
   - component: {fileID: 54257507364470388}
   - component: {fileID: 136492091063218390}
   - component: {fileID: 195179039066120208}
-  - component: {fileID: 114306588248014084}
   - component: {fileID: 114868367229754540}
   - component: {fileID: 114042323830866346}
   - component: {fileID: 82231805717969210}
   - component: {fileID: 114758826590641636}
+  - component: {fileID: 114026305405316358}
   m_Layer: 10
   m_Name: Player
   m_TagString: Player
@@ -2140,6 +2140,22 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
+--- !u!114 &114026305405316358
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1571261799754092}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 069fcbdba57433b42bdc77991c58fe16, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealthPoints: 100
+  healthBar: {fileID: 0}
+  damageSounds: []
+  deathSounds: []
+  deathVanishSeconds: 2
 --- !u!114 &114042323830866346
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2151,7 +2167,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 902b3202dbe6da449870cca2e0d9bb9a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealthPoints: 1000
   baseDamage: 50
   currentWeaponConfig: {fileID: 11400000, guid: 74ea27102b06f5f418094321df2ef5a6,
     type: 2}
@@ -2161,39 +2176,9 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 5c6181e73f2419742a0202376033b9ee, type: 2}
   - {fileID: 11400000, guid: c19d1952036075a48af616512d83488c, type: 2}
   - {fileID: 11400000, guid: bdff9051b2dc625459468a95c567debc, type: 2}
-  damageSounds:
-  - {fileID: 8300000, guid: 918cdaaabcc9d684fb7845dc09514089, type: 3}
-  - {fileID: 8300000, guid: 8d7ef8250c6ec0b4b97962f8ddaccc96, type: 3}
-  - {fileID: 8300000, guid: 4258198ced2ce484a98cabd8089531c6, type: 3}
-  - {fileID: 8300000, guid: 7aa7819e90ae3f340abfa3191d6aa982, type: 3}
-  - {fileID: 8300000, guid: 948cb22508afefb4cbfd9fd46167a1d0, type: 3}
-  - {fileID: 8300000, guid: 047f72bc5279b5547a1b2d97af0e91b5, type: 3}
-  deathSounds:
-  - {fileID: 8300000, guid: 08b7ff933ce57a04e9ef9c4586e6d730, type: 3}
-  - {fileID: 8300000, guid: 0b326a1616f732e48b6ef6589f3bdf35, type: 3}
-  - {fileID: 8300000, guid: 02075511e90411047a7efbf0c3a8a7b0, type: 3}
   criticalHitChance: 0.1
   criticalHitMultiplier: 1.5
   criticalParticleSystem: {fileID: 198468640977534628}
---- !u!114 &114306588248014084
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1571261799754092}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ce7a80d520cacc042b5fe14f373d8173, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_MovingTurnSpeed: 1800
-  m_StationaryTurnSpeed: 900
-  m_JumpPower: 6
-  m_GravityMultiplier: 2
-  m_RunCycleLegOffset: 0.2
-  m_MoveSpeedMultiplier: 1
-  m_AnimSpeedMultiplier: 1
-  m_GroundCheckDistance: 1
 --- !u!114 &114597650721619676
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2230,6 +2215,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66dd389dd1f86c14f954217c5ea9e1c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  stoppingDistance: 1
+  moveSpeedMultiplier: 0.7
+  m_MovingTurnSpeed: 360
+  m_StationaryTurnSpeed: 180
+  animSpeedMultiplier: 1
+  moveThreshold: 1
 --- !u!136 &136492091063218390
 CapsuleCollider:
   m_ObjectHideFlags: 1
