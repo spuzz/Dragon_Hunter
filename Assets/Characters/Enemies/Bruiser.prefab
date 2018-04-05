@@ -218,9 +218,10 @@ GameObject:
   - component: {fileID: 95182911236997466}
   - component: {fileID: 54828142876543360}
   - component: {fileID: 136391409625504134}
-  - component: {fileID: 114689300701825026}
   - component: {fileID: 114679492156969776}
   - component: {fileID: 195795279541559158}
+  - component: {fileID: 114375709450938454}
+  - component: {fileID: 114115501190772718}
   m_Layer: 9
   m_Name: Bruiser
   m_TagString: Untagged
@@ -1432,7 +1433,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1234632898635156}
   m_LocalRotation: {x: -0, y: 0.99952453, z: -0, w: 0.030834997}
-  m_LocalPosition: {x: 15.622417, y: 0, z: 20.422722}
+  m_LocalPosition: {x: 14.593628, y: 0, z: 23.433918}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4792776582996646}
@@ -2545,6 +2546,39 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
+--- !u!114 &114115501190772718
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1234632898635156}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 069fcbdba57433b42bdc77991c58fe16, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealthPoints: 100
+  healthBar: {fileID: 0}
+  damageSounds: []
+  deathSounds: []
+  deathVanishSeconds: 2
+--- !u!114 &114375709450938454
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1234632898635156}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66dd389dd1f86c14f954217c5ea9e1c4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  stoppingDistance: 1
+  moveSpeedMultiplier: 0.7
+  m_MovingTurnSpeed: 360
+  m_StationaryTurnSpeed: 180
+  animSpeedMultiplier: 1
+  moveThreshold: 1
 --- !u!114 &114679492156969776
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2556,7 +2590,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e68bb33d36362440ac090ae05e868ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealthPoints: 200
   damagePerShot: 100
   secondsBetweenShots: 1
   attackRadius: 2
@@ -2565,25 +2598,6 @@ MonoBehaviour:
     type: 2}
   projectileSocket: {fileID: 1743913673448936}
   aimOffset: {x: 0, y: 1, z: 0}
---- !u!114 &114689300701825026
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1234632898635156}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ce7a80d520cacc042b5fe14f373d8173, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_MovingTurnSpeed: 1800
-  m_StationaryTurnSpeed: 900
-  m_JumpPower: 6
-  m_GravityMultiplier: 2
-  m_RunCycleLegOffset: 0.2
-  m_MoveSpeedMultiplier: 1
-  m_AnimSpeedMultiplier: 1
-  m_GroundCheckDistance: 1
 --- !u!114 &114769838314251114
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2603,7 +2617,7 @@ CapsuleCollider:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1234632898635156}
-  m_Material: {fileID: 13400000, guid: e52fb17f9b1e7fd48b8955f1391d3688, type: 2}
+  m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
   m_Radius: 0.3

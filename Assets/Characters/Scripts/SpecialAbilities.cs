@@ -12,6 +12,7 @@ namespace RPG.Characters
         [SerializeField] Image energyBar;
         [SerializeField] float maxEnergyPounts = 100f;
         [SerializeField] float regenPerSecond = 1f;
+        [SerializeField] AudioClip outOfEnergy;
 
         AudioSource audioSource;
         // todo add outOfEnergy
@@ -28,19 +29,22 @@ namespace RPG.Characters
 
 
         }
-        public void AttemptSpecialAbility(int index)
+        public void AttemptSpecialAbility(int index, GameObject enemy = null)
         {
             var energyCost = abilities[index].GetEnergyCost();
             if (IsEnergyAvailable(energyCost))
             {
                 ConsumeEnergy(energyCost);
                 // todo make work
-                //var abilityParams = new AbilityUseParams(currentEnemy, baseDamage);
-                //abilities[index].Use(abilityParams);
+                abilities[index].Use(enemy);
             }
             else
             {
-                // todo play out of energy sound
+                if(!audioSource.isPlaying)
+                {
+                    audioSource.PlayOneShot(outOfEnergy);
+                }
+                
 
             }
 

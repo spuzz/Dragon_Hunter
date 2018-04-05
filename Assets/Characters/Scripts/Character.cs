@@ -5,22 +5,38 @@ using RPG.CameraUI;
 
 namespace RPG.Characters
 {
-    [RequireComponent(typeof(NavMeshAgent))]
 
-    public class CharacterMovement : MonoBehaviour
+    public class Character : MonoBehaviour
     {
+        [Header("Animator")]
+        [SerializeField] RuntimeAnimatorController animatorController;
+        [SerializeField] AnimatorOverrideController animatorOverrideController;
+        [SerializeField] Avatar characterAvatar;
 
-        [SerializeField] float stoppingDistance = 1;
+        [Header("Collider")]
+        [SerializeField] Vector3 colliderCenter = new Vector3(0,1.0f,0);
+        [SerializeField] float colliderRadius = 0.2f;
+        [SerializeField] float colliderHeight = 2.0f;
+
+        [Header("Audio Source")]
+        [SerializeField] float audioSpatialBlend = 1.0f;
+
+        [Header("Nav Mesh Agent")]
+        [SerializeField] float steeringSpeed  = 1;
+        [SerializeField] float stoppingDistance = 1.3f;
+
+        [Header("Movement")]
         [SerializeField] float moveSpeedMultiplier = 0.7f;
         [SerializeField] float m_MovingTurnSpeed = 360;
         [SerializeField] float m_StationaryTurnSpeed = 180;
         [SerializeField] float animSpeedMultiplier = 1f;
         [SerializeField] float moveThreshold = 1f;
-
+        
         Vector3 CurrentDestination, clickPoint;
         GameObject walkTarget = null;
-        NavMeshAgent navAgent;
+        NavMeshAgent navMeshAgent;
         Animator animator;
+        
         Rigidbody charRigidBody;
         float m_TurnAmount;
         float m_ForwardAmount;
@@ -47,6 +63,36 @@ namespace RPG.Characters
             UpdateAnimator();
         }
 
+        private void Awake()
+        {
+            AddRequiredComponents();
+        }
+
+        private void AddRequiredComponents()
+        {
+            animator = gameObject.AddComponent<Animator>();
+            animator.runtimeAnimatorController = animatorController;
+            animator.avatar = characterAvatar;
+
+            CapsuleCollider collider = gameObject.AddComponent<CapsuleCollider>();
+            collider.center = colliderCenter;
+            collider.radius = colliderRadius;
+            collider.height = colliderHeight;
+
+            charRigidBody = gameObject.AddComponent<Rigidbody>();
+            charRigidBody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
+
+            navMeshAgent = gameObject.AddComponent<NavMeshAgent>();
+            navMeshAgent.updateRotation = false;
+            navMeshAgent.updatePosition = true;
+            navMeshAgent.speed = steeringSpeed;
+            navMeshAgent.stoppingDistance = stoppingDistance;
+            navMeshAgent.autoBraking = false;
+
+            var source = gameObject.AddComponent<AudioSource>();
+            source.spatialBlend = audioSpatialBlend;
+        }
+
         private void Start()
         {
             CameraRaycaster cameraRaycaster = Camera.main.GetComponent<CameraRaycaster>();
@@ -55,15 +101,6 @@ namespace RPG.Characters
             cameraRaycaster.onMouseOverEnemy += OnMouseOverEnemy;
             CurrentDestination = transform.position;
             walkTarget = new GameObject("WalkTarget");
-            navAgent = GetComponent<NavMeshAgent>();
-            navAgent.updateRotation = false;
-            navAgent.updatePosition = true;
-            navAgent.stoppingDistance = stoppingDistance;
-
-            animator = GetComponent<Animator>();
-            charRigidBody = GetComponent<Rigidbody>();
-
-            charRigidBody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
 
             animator.applyRootMotion = true;
         }
@@ -71,9 +108,9 @@ namespace RPG.Characters
 
         private void Update()
         {
-            if (navAgent.remainingDistance > navAgent.stoppingDistance)
+            if (navMeshAgent.remainingDistance > navMeshAgent.stoppingDistance)
             {
-                Move(navAgent.desiredVelocity);
+                Move(navMeshAgent.desiredVelocity);
             }
             else
             {
@@ -85,7 +122,7 @@ namespace RPG.Characters
             if(Input.GetMouseButton(0) == true)
             {
                 walkTarget.transform.position = destination;
-                navAgent.SetDestination(walkTarget.transform.position);
+                navMeshAgent.SetDestination(walkTarget.transform.position);
             }
         }
 
@@ -93,7 +130,7 @@ namespace RPG.Characters
         {
             if(Input.GetMouseButton(0) == true || Input.GetMouseButtonDown(1) == true)
             {
-                navAgent.SetDestination(enemy.transform.position);
+                navMeshAgent.SetDestination(enemy.transform.position);
             }
         }
 

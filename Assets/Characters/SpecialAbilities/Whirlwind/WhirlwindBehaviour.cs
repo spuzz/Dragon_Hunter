@@ -8,23 +8,23 @@ namespace RPG.Characters
     public class WhirlwindBehaviour : AbilityBehaviour
     {
 
-        public override void Use(AbilityUseParams abilityUseParams)
+        public override void Use(GameObject target = null)
         {
-            DealAoeDamage(abilityUseParams);
+            DealAoeDamage();
             PlayParticleEffect();
             PlayAbilitySound();
         }
 
 
-        private void DealAoeDamage(AbilityUseParams abilityUseParams)
+        private void DealAoeDamage()
         {
             Collider[] hits = Physics.OverlapSphere(gameObject.transform.position, (config as WhirlwindConfig).GetRadius());
             foreach (Collider hit in hits)
             {
-                Enemy enemy = hit.gameObject.GetComponent<Enemy>();
-                if (enemy)
+                HealthSystem enemyHealth = hit.gameObject.GetComponent<HealthSystem>();
+                if (enemyHealth)
                 {
-                    enemy.TakeDamage((config as WhirlwindConfig).GetDamage());
+                    enemyHealth.TakeDamage((config as WhirlwindConfig).GetDamage());
                 }
             }
         }

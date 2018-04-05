@@ -19,7 +19,7 @@ namespace RPG.Characters
         Animator animator;
         AudioSource source;
         const string DEATH_TRIGGER = "Death";
-        CharacterMovement characterMovement;
+        Character characterMovement;
 
         public float healthAsPercentage { get { return currentHealthPoints / (float)maxHealthPoints; } }
         // Use this for initialization
@@ -27,7 +27,7 @@ namespace RPG.Characters
         {
             animator = GetComponent<Animator>();
             source = GetComponent<AudioSource>();
-            characterMovement = GetComponent<CharacterMovement>();
+            characterMovement = GetComponent<Character>();
 
             currentHealthPoints = maxHealthPoints;
         }
@@ -54,8 +54,12 @@ namespace RPG.Characters
         private void ReduceHealth(float damage)
         {
             currentHealthPoints = Mathf.Clamp(currentHealthPoints - damage, 0, maxHealthPoints);
-            var clip = damageSounds[UnityEngine.Random.Range(0, damageSounds.Length)];
-            source.PlayOneShot(clip);
+            if(damageSounds.Length > 0)
+            {
+                var clip = damageSounds[UnityEngine.Random.Range(0, damageSounds.Length)];
+                source.PlayOneShot(clip);
+            }
+
         }
 
         private void IncreaseHealth(float heal)
@@ -73,16 +77,24 @@ namespace RPG.Characters
             var playerComponent = GetComponent<Player>();
             if(playerComponent && playerComponent.isActiveAndEnabled)
             {
-                source.clip = deathSounds[UnityEngine.Random.Range(0, deathSounds.Length)];
-                source.Play();
-                yield return new WaitForSeconds(source.clip.length);
+                if(deathSounds.Length > 0)
+                {
+                    source.clip = deathSounds[UnityEngine.Random.Range(0, deathSounds.Length)];
+                    source.Play();
+                    yield return new WaitForSeconds(source.clip.length);
+                }
+
                 SceneManager.LoadScene(0);
             }
             else
             {
-                source.clip = deathSounds[UnityEngine.Random.Range(0, deathSounds.Length)];
-                source.Play();
-                yield return new WaitForSeconds(source.clip.length);
+                if (deathSounds.Length > 0)
+                {
+                    source.clip = deathSounds[UnityEngine.Random.Range(0, deathSounds.Length)];
+                    source.Play();
+                    yield return new WaitForSeconds(source.clip.length);
+                }
+                
                 DestroyObject(gameObject,deathVanishSeconds);
             }
 

@@ -5,7 +5,7 @@ using RPG.Core;
 
 namespace RPG.Characters
 {
-    public class Enemy : MonoBehaviour, IDamageable
+    public class Enemy : MonoBehaviour
     {
 
         [SerializeField] float damagePerShot = 9f;
@@ -27,10 +27,6 @@ namespace RPG.Characters
             player = FindObjectOfType<Player>();
         }
 
-        public void TakeDamage(float damage)
-        {
-            // todo remove
-        }
         public void Update()
         {
             float distancetoPlayer = Vector3.Distance(player.transform.position, transform.position);

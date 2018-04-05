@@ -113,7 +113,7 @@ namespace RPG.Characters
                 }
                 if (Input.GetMouseButtonDown(1))
                 {
-                    specialAbilties.AttemptSpecialAbility(0);
+                    specialAbilties.AttemptSpecialAbility(0,enemy.gameObject);
                 }
             }
   
@@ -128,7 +128,7 @@ namespace RPG.Characters
             {
                 SetAttackAnimation();
                 animator.SetTrigger("Attack");
-                enemy.TakeDamage(CalculateDamage());
+                enemy.GetComponent<HealthSystem>().TakeDamage(CalculateDamage());
                 lastHitTime = Time.time;
             }
         }
