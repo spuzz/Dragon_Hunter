@@ -33,13 +33,15 @@ namespace RPG.Characters
         [SerializeField] float moveThreshold = 1f;
         
         Vector3 CurrentDestination, clickPoint;
-        GameObject walkTarget = null;
+        
         NavMeshAgent navMeshAgent;
         Animator animator;
         
         Rigidbody charRigidBody;
         float m_TurnAmount;
         float m_ForwardAmount;
+
+        bool isAlive = true;
         public void OnAnimatorMove()
         {
             if (Time.deltaTime > 0)
@@ -53,7 +55,12 @@ namespace RPG.Characters
 
         public void Kill()
         {
+            isAlive = false;
+        }
 
+        public void SetDestination(Vector3 worldPos)
+        {
+            navMeshAgent.SetDestination(worldPos);
         }
 
         public void Move(Vector3 movement)
@@ -88,27 +95,20 @@ namespace RPG.Characters
             navMeshAgent.speed = steeringSpeed;
             navMeshAgent.stoppingDistance = stoppingDistance;
             navMeshAgent.autoBraking = false;
-
+            animator.applyRootMotion = true;
             var source = gameObject.AddComponent<AudioSource>();
             source.spatialBlend = audioSpatialBlend;
         }
 
         private void Start()
         {
-            CameraRaycaster cameraRaycaster = Camera.main.GetComponent<CameraRaycaster>();
-
-            cameraRaycaster.onMouseOverTerrain += ProcessMouseOverTerrain;
-            cameraRaycaster.onMouseOverEnemy += OnMouseOverEnemy;
             CurrentDestination = transform.position;
-            walkTarget = new GameObject("WalkTarget");
-
-            animator.applyRootMotion = true;
         }
 
 
         private void Update()
         {
-            if (navMeshAgent.remainingDistance > navMeshAgent.stoppingDistance)
+            if (navMeshAgent.remainingDistance > navMeshAgent.stoppingDistance && isAlive)
             {
                 Move(navMeshAgent.desiredVelocity);
             }
@@ -117,23 +117,11 @@ namespace RPG.Characters
                 Move(Vector3.zero);
             }
         }
-        private void ProcessMouseOverTerrain(Vector3 destination)
-        {
-            if(Input.GetMouseButton(0) == true)
-            {
-                walkTarget.transform.position = destination;
-                navMeshAgent.SetDestination(walkTarget.transform.position);
-            }
-        }
 
-        private void OnMouseOverEnemy(Enemy enemy)
+        public AnimatorOverrideController GetOverrideController()
         {
-            if(Input.GetMouseButton(0) == true || Input.GetMouseButtonDown(1) == true)
-            {
-                navMeshAgent.SetDestination(enemy.transform.position);
-            }
+            return animatorOverrideController;
         }
-
         private void OnDrawGizmos()
         {
             Gizmos.color = Color.black;
