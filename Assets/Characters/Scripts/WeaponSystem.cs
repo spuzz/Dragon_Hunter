@@ -69,7 +69,7 @@ namespace RPG.Characters
             return dominantHands[0].gameObject;
         }
 
-        private void AttackTarget(Enemy enemy)
+        private void AttackTarget(EnemyAI enemy)
         {
 
             if (Time.time - lastHitTime > currentWeaponConfig.GetMinTimeBetweenHits())

@@ -17,7 +17,7 @@ namespace RPG.CameraUI
 
         Rect screenRect = new Rect(0, 0, Screen.width, Screen.height);
         // New Delegates
-        public delegate void OnMouseOverEnemy(Enemy enemy); // declare new delegate type
+        public delegate void OnMouseOverEnemy(EnemyAI enemy); // declare new delegate type
         public event OnMouseOverEnemy onMouseOverEnemy; // instantiate an observer set
 
         public delegate void OnMouseOverTerrain(Vector3 destination); // declare new delegate type
@@ -53,7 +53,7 @@ namespace RPG.CameraUI
             bool potentialEnemyHit = Physics.Raycast(ray, out raycastHit, maxRaycastDepth);
             if (potentialEnemyHit) // if hit no priority object
             {
-                Enemy enemy = raycastHit.collider.gameObject.GetComponent<Enemy>();
+                EnemyAI enemy = raycastHit.collider.gameObject.GetComponent<EnemyAI>();
                 if (enemy)
                 {
                     Cursor.SetCursor(enemyCursor, cursorHotspot, CursorMode.Auto);

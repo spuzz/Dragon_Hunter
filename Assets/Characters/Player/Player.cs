@@ -70,7 +70,7 @@ namespace RPG.Characters
             }
         }
 
-        private void ProcessMouseOverEnemy(Enemy enemy)
+        private void ProcessMouseOverEnemy(EnemyAI enemy)
         {
             if (IsTargetInRange(enemy.gameObject))
             {

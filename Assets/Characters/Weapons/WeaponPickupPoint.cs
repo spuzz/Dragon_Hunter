@@ -55,7 +55,7 @@ namespace RPG.Characters
             var audioSource = GetComponent<AudioSource>();
             audioSource.PlayOneShot(pickUpSFX);
             GetComponent<CapsuleCollider>().enabled = false;
-            Destroy(gameObject);
+            //Destroy(gameObject);
         }
     }
 
