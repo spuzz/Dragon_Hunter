@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -21,7 +22,6 @@ namespace RPG.Characters
         Character character;
         Animator animator;
         float lastHitTime = 0;
-
         // Use this for initialization
         void Start()
         {
@@ -56,7 +56,45 @@ namespace RPG.Characters
         public void AttackTarget(GameObject targetToAttack)
         {
             target = targetToAttack;
-            // todo use a repeat attack co-routine
+            StartCoroutine(AttackTargetRepeatedly());
+        }
+
+        IEnumerator AttackTargetRepeatedly()
+        {
+
+            while(true)
+            {
+                if(!target)
+                {
+                    break;
+                }
+                bool isAttackerAlive = GetComponent<HealthSystem>().healthAsPercentage >= Mathf.Epsilon;
+                bool isTargetAlive = target.GetComponent<HealthSystem>().healthAsPercentage >= Mathf.Epsilon;
+                float weaponHitPeriod = currentWeaponConfig.GetMinTimeBetweenHits() * character.GetAnimSpeedMultiplier();
+                if (isAttackerAlive && isTargetAlive && Time.time - lastHitTime > weaponHitPeriod)
+                {
+                    AttackTargetOnce();
+                    lastHitTime = Time.time;
+                }
+                yield return new WaitForSeconds(weaponHitPeriod);
+            }
+        }
+
+        private void AttackTargetOnce()
+        {
+            transform.LookAt(target.transform);
+            SetAttackAnimation();
+            animator.SetTrigger("Attack");
+            float damageDelay = 1.0f; // todo damage delay
+            StartCoroutine(DamageAfterDelay(damageDelay));
+            
+        }
+
+        private IEnumerator DamageAfterDelay(float damageDelay)
+        {
+
+            yield return new WaitForSeconds(damageDelay);
+            target.GetComponent<HealthSystem>().TakeDamage(CalculateDamage());
         }
 
         private GameObject RequestDominantHand()
@@ -67,18 +105,6 @@ namespace RPG.Characters
             Assert.IsFalse(numberOfDominantHands < 0, "No DominantHand found on Player, Please add one");
             Assert.IsFalse(numberOfDominantHands > 1, "Multiple DominantHand scripts on Player, please remove one");
             return dominantHands[0].gameObject;
-        }
-
-        private void AttackTarget(EnemyAI enemy)
-        {
-
-            if (Time.time - lastHitTime > currentWeaponConfig.GetMinTimeBetweenHits())
-            {
-                SetAttackAnimation();
-                animator.SetTrigger("Attack");
-                enemy.GetComponent<HealthSystem>().TakeDamage(CalculateDamage());
-                lastHitTime = Time.time;
-            }
         }
 
         private float CalculateDamage()
@@ -98,7 +124,12 @@ namespace RPG.Characters
 
         private void SetAttackAnimation()
         {
-            animator = GetComponent<Animator>();
+
+            if(!character.GetOverrideController())
+            {
+                Debug.Break();
+                Debug.LogAssertion("Please provie " + gameObject + " with animator override controller");
+            }
             var overrideController = character.GetOverrideController();
             animator.runtimeAnimatorController = overrideController;
             overrideController[DEFAULT_ATTACK] = currentWeaponConfig.GetAttackAnimation();
