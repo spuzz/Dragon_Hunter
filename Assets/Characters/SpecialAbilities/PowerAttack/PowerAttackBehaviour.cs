@@ -17,6 +17,7 @@ namespace RPG.Characters
             
             PlayParticleEffect();
             PlayAbilitySound();
+            PlayAnimation();
         }
     }
 }

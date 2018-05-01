@@ -10,12 +10,12 @@ namespace RPG.Characters
     {
 
         RawImage energyBarRawImage;
-        Player player;
+        PlayerControl player;
 
         // Use this for initialization
         void Start()
         {
-            player = FindObjectOfType<Player>();
+            player = FindObjectOfType<PlayerControl>();
             energyBarRawImage = GetComponent<RawImage>();
         }
 

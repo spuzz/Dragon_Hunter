@@ -6,6 +6,7 @@ namespace RPG.Characters
 {
     public abstract class AbilityBehaviour : MonoBehaviour
     {
+        const string DEFAULT_ATTACK = "Default Attack";
         protected AbilityConfig config;
 
         const float PARTICLE_CLEAN_UP_DELAY = 20;
@@ -43,6 +44,16 @@ namespace RPG.Characters
             var abilitySound = config.GetRandomAudioClip();
             var audioSource = GetComponent<AudioSource>();
             audioSource.PlayOneShot(abilitySound);
+        }
+
+        protected void PlayAnimation()
+        {
+            var abilityAnimation = config.GetAbilityAnimation();
+            var overrideController = GetComponent<Character>().GetOverrideController();
+            var animator = GetComponent<Animator>();
+            
+            overrideController[DEFAULT_ATTACK] = abilityAnimation;
+            animator.SetTrigger("Attack");
         }
     }
 

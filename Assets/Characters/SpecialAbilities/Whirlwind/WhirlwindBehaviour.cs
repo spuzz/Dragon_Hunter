@@ -13,6 +13,7 @@ namespace RPG.Characters
             DealAoeDamage();
             PlayParticleEffect();
             PlayAbilitySound();
+            PlayAnimation();
         }
 
 

@@ -35,6 +35,30 @@ namespace RPG.Characters
         // Update is called once per frame
         void Update()
         {
+            bool targetIsDead;
+            bool targetIsOutOfRange;
+
+            if(target == null)
+            {
+                targetIsDead = false;
+                targetIsOutOfRange = false;
+            }
+            else
+            {
+                var targetHealth = target.GetComponent<HealthSystem>().healthAsPercentage;
+                targetIsDead = targetHealth <= Mathf.Epsilon;
+
+                float distanceToTarget = Vector3.Distance(gameObject.transform.position, target.transform.position);
+                targetIsOutOfRange = distanceToTarget > currentWeaponConfig.GetMaxAttackRange();
+            }
+
+            var characterHealth = gameObject.GetComponent<HealthSystem>().healthAsPercentage;
+            bool characterIsDead = characterHealth <= Mathf.Epsilon;
+
+            if (characterIsDead || targetIsDead || targetIsOutOfRange)
+            {
+                StopAllCoroutines();
+            }
 
         }
 
@@ -59,19 +83,19 @@ namespace RPG.Characters
             StartCoroutine(AttackTargetRepeatedly());
         }
 
+        public void StopAttacking()
+        {
+            StopAllCoroutines();
+        }
         IEnumerator AttackTargetRepeatedly()
         {
-
-            while(true)
+            bool isAttackerAlive = GetComponent<HealthSystem>().healthAsPercentage >= Mathf.Epsilon;
+            bool isTargetAlive = target.GetComponent<HealthSystem>().healthAsPercentage >= Mathf.Epsilon;
+            while (isAttackerAlive && isTargetAlive)
             {
-                if(!target)
-                {
-                    break;
-                }
-                bool isAttackerAlive = GetComponent<HealthSystem>().healthAsPercentage >= Mathf.Epsilon;
-                bool isTargetAlive = target.GetComponent<HealthSystem>().healthAsPercentage >= Mathf.Epsilon;
+
                 float weaponHitPeriod = currentWeaponConfig.GetMinTimeBetweenHits() * character.GetAnimSpeedMultiplier();
-                if (isAttackerAlive && isTargetAlive && Time.time - lastHitTime > weaponHitPeriod)
+                if (Time.time - lastHitTime > weaponHitPeriod)
                 {
                     AttackTargetOnce();
                     lastHitTime = Time.time;
@@ -85,7 +109,7 @@ namespace RPG.Characters
             transform.LookAt(target.transform);
             SetAttackAnimation();
             animator.SetTrigger("Attack");
-            float damageDelay = 1.0f; // todo damage delay
+            float damageDelay = 0.1f; // todo damage delay
             StartCoroutine(DamageAfterDelay(damageDelay));
             
         }
