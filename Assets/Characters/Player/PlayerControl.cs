@@ -59,6 +59,8 @@ namespace RPG.Characters
         {
             if (Input.GetMouseButton(0) == true)
             {
+                StopAllCoroutines();
+                weaponSystem.StopAttacking();
                 character.SetDestination(destination);
             }
         }
@@ -102,14 +104,14 @@ namespace RPG.Characters
         private IEnumerator MoveAndPowerAttackTarget(GameObject enemy)
         {
             yield return StartCoroutine(MoveToTarget(enemy));
-            weaponSystem.AttackTarget(enemy);
-            
+            specialAbilties.AttemptSpecialAbility(0, enemy.gameObject);
+
         }
 
         private IEnumerator MoveAndAttackTarget(GameObject enemy)
         {
             yield return StartCoroutine(MoveToTarget(enemy));
-            specialAbilties.AttemptSpecialAbility(0, enemy.gameObject);
+            weaponSystem.AttackTarget(enemy);
         }
 
         private bool IsTargetInRange(GameObject target)

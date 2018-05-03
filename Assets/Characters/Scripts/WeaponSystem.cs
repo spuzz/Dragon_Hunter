@@ -86,6 +86,7 @@ namespace RPG.Characters
         public void StopAttacking()
         {
             StopAllCoroutines();
+            animator.StopPlayback();
         }
         IEnumerator AttackTargetRepeatedly()
         {
@@ -109,7 +110,7 @@ namespace RPG.Characters
             transform.LookAt(target.transform);
             SetAttackAnimation();
             animator.SetTrigger("Attack");
-            float damageDelay = 0.1f; // todo damage delay
+            float damageDelay = currentWeaponConfig.GetDamageDelay();
             StartCoroutine(DamageAfterDelay(damageDelay));
             
         }

@@ -38,23 +38,29 @@ namespace RPG.Characters
         public void Update()
         {
             distanceToPlayer = Vector3.Distance(player.transform.position, transform.position);
+            weaponSystem = GetComponent<WeaponSystem>();
             currentWeaponRange = weaponSystem.GetWeaponConfig().GetMaxAttackRange();
 
-            if( distanceToPlayer > chaseRadius && state != State.patrolling)
+            bool inWeaponCricle = distanceToPlayer <= currentWeaponRange;
+            bool inChaseCircle = distanceToPlayer > currentWeaponRange && distanceToPlayer <= chaseRadius;
+            bool outsideChaseCircle = distanceToPlayer > chaseRadius;
+
+            if(outsideChaseCircle && state != State.patrolling)
             {
                 StopAllCoroutines();
                 weaponSystem.StopAttacking();
                 StartCoroutine(Patrol());
             }
-            if (distanceToPlayer <= chaseRadius && state != State.chasing && state != State.attacking)
+            if (inChaseCircle && state != State.chasing)
             {
                 StopAllCoroutines();
                 weaponSystem.StopAttacking();
                 StartCoroutine(ChasePlayer());
             }
-            if (distanceToPlayer <= currentWeaponRange && state != State.attacking)
+            if (inWeaponCricle && state != State.attacking)
             {
                 StopAllCoroutines();
+                character.SetDestination(gameObject.transform.position);
                 state = State.attacking;
                 weaponSystem.AttackTarget(player.gameObject);
             }
