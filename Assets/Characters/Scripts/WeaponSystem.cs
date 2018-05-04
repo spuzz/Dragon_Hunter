@@ -21,7 +21,7 @@ namespace RPG.Characters
         GameObject target;
         Character character;
         Animator animator;
-        float lastHitTime = 0;
+        float lastHitTime = -1;
         // Use this for initialization
         void Start()
         {
@@ -94,14 +94,16 @@ namespace RPG.Characters
             bool isTargetAlive = target.GetComponent<HealthSystem>().healthAsPercentage >= Mathf.Epsilon;
             while (isAttackerAlive && isTargetAlive)
             {
-
-                float weaponHitPeriod = currentWeaponConfig.GetMinTimeBetweenHits() * character.GetAnimSpeedMultiplier();
-                if (Time.time - lastHitTime > weaponHitPeriod)
+                var animationClip = currentWeaponConfig.GetAttackAnimation();
+                float animationClipTime = animationClip.length / character.GetAnimSpeedMultiplier();
+                float timeToWait = animationClipTime + currentWeaponConfig.GetMinTimeBetweenAnimationCycles();
+                bool isTimeToHitAgain = Time.time - lastHitTime > timeToWait || lastHitTime == -1;
+                if (isTimeToHitAgain)
                 {
                     AttackTargetOnce();
                     lastHitTime = Time.time;
                 }
-                yield return new WaitForSeconds(weaponHitPeriod);
+                yield return new WaitForSeconds(0.1f);
             }
         }
 

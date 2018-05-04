@@ -156,7 +156,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4329488084645296}
-  m_Layer: 10
+  m_Layer: 0
   m_Name: Particle Systems
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -479,7 +479,7 @@ GameObject:
   - component: {fileID: 114758826590641636}
   - component: {fileID: 114026305405316358}
   - component: {fileID: 114019282569226774}
-  m_Layer: 10
+  m_Layer: 0
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -743,7 +743,7 @@ GameObject:
   - component: {fileID: 4040945432388598}
   - component: {fileID: 198468640977534628}
   - component: {fileID: 199744674709892036}
-  m_Layer: 10
+  m_Layer: 0
   m_Name: CriticalHit Particles
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1171,7 +1171,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1571261799754092}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 16.74, y: 0.091560364, z: 15.13}
+  m_LocalPosition: {x: 14.79, y: 0.091560364, z: 18.94}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4925151235470502}
@@ -2085,6 +2085,7 @@ MonoBehaviour:
   m_StationaryTurnSpeed: 180
   animSpeedMultiplier: 1
   moveThreshold: 1
+  animatorForwardCap: 1
 --- !u!137 &137835921344293184
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 1

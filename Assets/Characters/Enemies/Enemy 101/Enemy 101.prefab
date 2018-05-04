@@ -2014,7 +2014,7 @@ MonoBehaviour:
     type: 2}
   characterAvatar: {fileID: 9000000, guid: d288a0e4a2d923b46898986e979da643, type: 3}
   colliderCenter: {x: 0, y: 1, z: 0}
-  colliderRadius: 0.2
+  colliderRadius: 2
   colliderHeight: 2
   audioSpatialBlend: 1
   steeringSpeed: 1
@@ -2024,6 +2024,7 @@ MonoBehaviour:
   m_StationaryTurnSpeed: 180
   animSpeedMultiplier: 1
   moveThreshold: 1
+  animatorForwardCap: 1
 --- !u!114 &114782436422854860
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2086,6 +2087,7 @@ MonoBehaviour:
   chaseRadius: 5
   patrolPath: {fileID: 0}
   waypointTolerance: 1.5
+  waypointDwellTime: 0.5
 --- !u!137 &137266815740582544
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 1

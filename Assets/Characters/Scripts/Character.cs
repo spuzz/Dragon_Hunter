@@ -31,7 +31,8 @@ namespace RPG.Characters
         [SerializeField] float m_StationaryTurnSpeed = 180;
         [SerializeField] float animSpeedMultiplier = 1f;
         [SerializeField] float moveThreshold = 1f;
-        
+        [SerializeField] [Range(0.1f,1f)] float animatorForwardCap = 1f;
+
         Vector3 CurrentDestination, clickPoint;
         
         NavMeshAgent navMeshAgent;
@@ -80,6 +81,7 @@ namespace RPG.Characters
             animator = gameObject.AddComponent<Animator>();
             animator.runtimeAnimatorController = animatorController;
             animator.avatar = characterAvatar;
+            
 
             CapsuleCollider collider = gameObject.AddComponent<CapsuleCollider>();
             collider.center = colliderCenter;
@@ -112,6 +114,10 @@ namespace RPG.Characters
         }
         private void Update()
         {
+            if(!navMeshAgent.isOnNavMesh)
+            {
+                Debug.LogError("RANDOM GUY NOT ON NAVMESH");
+            }
             if (navMeshAgent.remainingDistance > navMeshAgent.stoppingDistance && isAlive)
             {
                 Move(navMeshAgent.desiredVelocity);
@@ -152,7 +158,7 @@ namespace RPG.Characters
 
         void UpdateAnimator()
         {
-            animator.SetFloat("Forward", m_ForwardAmount, 0.1f, Time.deltaTime);
+            animator.SetFloat("Forward", m_ForwardAmount * animatorForwardCap, 0.1f, Time.deltaTime);
             animator.SetFloat("Turn", m_TurnAmount, 0.1f, Time.deltaTime);
             animator.speed = animSpeedMultiplier;
         }
